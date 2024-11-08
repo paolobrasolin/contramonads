@@ -39,7 +39,7 @@ record InvolutiveMonad : Set (o ⊔ l ⊔ e) where
 
 open InvolutiveMonad
 
-Contra→Invol : (R : Contramonad) → InvolutiveMonad
+Contra→Invol : Contramonad {𝓒 = 𝓒} → InvolutiveMonad
 Contra→Invol R = record
   { M = 𝐏Monad {R = R}
   ; klInvol = record
@@ -54,7 +54,7 @@ Contra→Invol R = record
     }
   } where module R = Contramonad R
 
-Invol→Contra : (𝓘𝓥 : InvolutiveMonad) → Contramonad
+Invol→Contra : (𝓘𝓥 : InvolutiveMonad) → Contramonad {𝓒 = 𝓒}
 Invol→Contra 𝓘𝓥 = record
   { F = {!   !} -- Functor.op (Free (M 𝓘𝓥)) ∘F I klInvol 𝓘𝓥 ∘F Forgetful (M 𝓘𝓥)
   ; ι = {!   !}

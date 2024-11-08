@@ -33,9 +33,9 @@ record Involution (C : Category o l e) : Set (o ⊔ l ⊔ e) where
 open Involution
 
 record InvolutiveMonad : Set (o ⊔ l ⊔ e) where
- field
-  M : Monad 𝓒
-  klInvol : Involution (Kleisli M)
+  field
+    M : Monad 𝓒
+    klInvol : Involution (Kleisli M)
 
 open InvolutiveMonad
 
@@ -64,3 +64,4 @@ Invol→Contra 𝓘𝓥 = record
   ; C3 = {!   !}
   ; C4 = {!   !}
   } where 𝐈 = Functor.op (I (klInvol 𝓘𝓥))
+

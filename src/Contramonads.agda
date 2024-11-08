@@ -2,7 +2,7 @@
 
 open import Categories.Category
 open import Categories.Functor renaming (id to idF)
-open import Categories.Functor.Properties
+open import MyCategories.Functor.Properties using ([_]-elim)
 open import Categories.Category.Core
 
 module Contramonads {o l e} {𝓒 : Category o l e} where
@@ -10,6 +10,7 @@ module Contramonads {o l e} {𝓒 : Category o l e} where
 open import Level
 
 open import Categories.Monad hiding (id)
+open import MyCategories.Monad using (monadMap)
 open import Categories.NaturalTransformation.Dinatural renaming (DinaturalTransformation to Dinat)
 open import Categories.Category.Product
 open import Categories.NaturalTransformation.Core renaming (id to idN)

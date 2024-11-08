@@ -1,0 +1,7 @@
+name: Contramonads
+include:
+  src
+depend:
+  standard-library
+  agda-categories
+

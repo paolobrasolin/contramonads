@@ -71,14 +71,14 @@ record Contramonad : Set (o ⊔ l ⊔ e) where
   C4 : ∀ {A : Obj} →
    F.F₁ (δ.α A) ∘ δ.α (F.F₀ A) ≈ δ.α A ∘ F.F₁ (ι.α A) ∘ F.F₁ (δ.α A) ∘ δ.α (F.F₀ A)
 
- ̂η : ∀ (X : Obj) → X ⇒ F².F₀ X
- ̂η X = δ.α X ∘ ι.α X
+ η̂ : ∀ (X : Obj) → X ⇒ F².F₀ X
+ η̂ X = δ.α X ∘ ι.α X
 
  𝐏 : ∀ {A B : Obj} (f : A ⇒ B) → F.F₀ A ⇒ F.F₀ B
  𝐏 {A} {B} f = F.F₁ (ι.α B) ∘ F².F₁ f ∘ δ.α A
 
- ̂μ : ∀ {X : Obj} → F².F₀ X ⇒ F.F₀ X
- ̂μ {X} = F.F₁ (ι.α X) ∘ F.F₁ (δ.α X) ∘ δ.α (F.F₀ X)
+ μ̂ : ∀ {X : Obj} → F².F₀ X ⇒ F.F₀ X
+ μ̂ {X} = F.F₁ (ι.α X) ∘ F.F₁ (δ.α X) ∘ δ.α (F.F₀ X)
 
  module _ where
   open Functor
@@ -106,7 +106,7 @@ record Contramonad : Set (o ⊔ l ⊔ e) where
   C6 {X} = (refl⟩∘⟨ 𝐏-unit-lemma) ○ Equiv.sym C3
 
   C7 : ∀ {X : Obj} →
-   F.F₁ (δ.α X) ∘ ̂η (F.F₀ X) ≈ δ.α X
+   F.F₁ (δ.α X) ∘ η̂ (F.F₀ X) ≈ δ.α X
   C7 {X} = begin
    _ ≈⟨ MR.pullˡ 𝓒 C4 ⟩
    _ ≈⟨ assoc ○ refl⟩∘⟨ assoc ○ (refl⟩∘⟨ (refl⟩∘⟨ assoc)) ⟩ -- TODO: refactor ugly assoc.
@@ -114,7 +114,7 @@ record Contramonad : Set (o ⊔ l ⊔ e) where
    _ ∎
 
   C8 : ∀ {X : Obj} →
-   F.F₁ (δ.α X) ≈ F.F₁ (̂η (F.F₀ X)) ∘ F².F₁ (δ.α X)
+   F.F₁ (δ.α X) ≈ F.F₁ (η̂ (F.F₀ X)) ∘ F².F₁ (δ.α X)
   C8 {X} = F-resp-≈ F (Equiv.sym C7) ○ homomorphism F
 
   𝐏Functor : Endofunctor 𝓒
@@ -139,7 +139,7 @@ module _ {R : Contramonad} where
  F²Monad = record
    { F = F²
    ; η = ntHelper (record
-     { η = λ X → ̂η X
+     { η = λ X → η̂ X
      ; commute = λ _ → C1
      })
    ; μ = ntHelper (record
@@ -184,7 +184,7 @@ module _ {R : Contramonad} where
        MR.elimˡ 𝓒 C6)}
      })
    ; μ = ntHelper (record
-     { η = λ X → ̂μ {X}
+     { η = λ X → μ̂ {X}
      ; commute = λ { {X} {Y} f → {!   !}}
      -- one of the most difficult proofs...
      })

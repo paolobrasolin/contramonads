@@ -123,8 +123,8 @@ record Contramonad : Set (o ⊔ l ⊔ e) where
    ; F₁ = λ f → 𝐏 f
    ; identity = λ { {A} → MR.elim-center 𝓒 (identity F²) ○ C6 }
    ; homomorphism = λ { {X} {Y} {Z} {f} {g} → Equiv.sym (
-     assoc ∙ (refl⟩∘⟨ assoc) ∙ 
-     (refl⟩∘⟨ refl⟩∘⟨ Equiv.sym C2) ∙ 
+     assoc ∙ (refl⟩∘⟨ assoc) ∙
+     (refl⟩∘⟨ refl⟩∘⟨ Equiv.sym C2) ∙
      MR.pull-center 𝓒 (Equiv.sym (homomorphism F²))
      )}
    ; F-resp-≈ = λ f≈g → refl⟩∘⟨ (F-resp-≈ F² f≈g ⟩∘⟨refl)
@@ -154,11 +154,11 @@ module _ {R : Contramonad} where
        _ ≈⟨ homomorphism F ⟩
        _ ∎
      })
-   ; assoc = λ { {X} → 
+   ; assoc = λ { {X} →
    begin _ ≈˘⟨ homomorphism F ⟩
          _ ≈˘⟨ F-resp-≈ F C1 ⟩
          _ ≈⟨ homomorphism F ⟩
-         _ ∎ 
+         _ ∎
          }
    ; sym-assoc = {!   !}
    ; identityˡ = λ { {X} →
@@ -190,12 +190,12 @@ module _ {R : Contramonad} where
      })
    ; assoc = λ { {X} → {!   !} }
    ; sym-assoc = λ { {X} →  {!   !} }
-   ; identityˡ = λ { {X} → 
-     assoc ∙ 
-     (refl⟩∘⟨ assoc) ∙ 
-     (skip-2 (Equiv.sym C2)) ∙ 
-     (refl⟩∘⟨ sym-assoc) ∙ 
-     (MR.elim-center 𝓒 (Equiv.sym (homomorphism F) ∙ [ F ]-elim C6)) ∙ 
+   ; identityˡ = λ { {X} →
+     assoc ∙
+     (refl⟩∘⟨ assoc) ∙
+     (skip-2 (Equiv.sym C2)) ∙
+     (refl⟩∘⟨ sym-assoc) ∙
+     (MR.elim-center 𝓒 (Equiv.sym (homomorphism F) ∙ [ F ]-elim C6)) ∙
      C6
      }
    ; identityʳ = λ { {X} → MR.assoc²βε 𝓒 ∙ Equiv.sym C3}

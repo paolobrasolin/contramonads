@@ -22,7 +22,7 @@ open Chain
 open import Contramonads
 
 open import Categories.Category.Equivalence using (WeakInverse)
-open import Categories.Category.Construction.Kleisli 
+open import Categories.Category.Construction.Kleisli
 open import Categories.Adjoint.Construction.Kleisli
 
 record Involution (C : Category o l e) : Set (o ⊔ l ⊔ e) where
@@ -40,27 +40,27 @@ record InvolutiveMonad : Set (o ⊔ l ⊔ e) where
 open InvolutiveMonad
 
 Contra→Invol : (R : Contramonad) → InvolutiveMonad
-Contra→Invol R = record 
+Contra→Invol R = record
   { M = 𝐏Monad {R = R}
-  ; klInvol = record 
+  ; klInvol = record
     { I = record
       { F₀ = λ x → x
       ; F₁ = λ { {B} {A} f → {!   !} ∘ R.̂η B }
       ; identity = {!   !}
       ; homomorphism = {!   !}
       ; F-resp-≈ = {!   !}
-      } 
-    ; inv = {!   !} 
-    } 
+      }
+    ; inv = {!   !}
+    }
   } where module R = Contramonad R
 
-Invol→Contra : (𝓘𝓥 : InvolutiveMonad) → Contramonad 
+Invol→Contra : (𝓘𝓥 : InvolutiveMonad) → Contramonad
 Invol→Contra 𝓘𝓥 = record
-  { F = {!   !} -- Functor.op (Free (M 𝓘𝓥)) ∘F I klInvol 𝓘𝓥 ∘F Forgetful (M 𝓘𝓥) 
-  ; ι = {!   !} 
-  ; δ = {!   !} 
-  ; C1 = {!   !} 
-  ; C2 = {!   !} 
-  ; C3 = {!   !} 
-  ; C4 = {!   !} 
+  { F = {!   !} -- Functor.op (Free (M 𝓘𝓥)) ∘F I klInvol 𝓘𝓥 ∘F Forgetful (M 𝓘𝓥)
+  ; ι = {!   !}
+  ; δ = {!   !}
+  ; C1 = {!   !}
+  ; C2 = {!   !}
+  ; C3 = {!   !}
+  ; C4 = {!   !}
   } where 𝐈 = Functor.op (I (klInvol 𝓘𝓥))

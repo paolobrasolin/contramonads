@@ -159,7 +159,12 @@ module _ {R : Contramonad} where
         _ ≈⟨ homomorphism F ⟩
         _ ∎
         }
-    ; sym-assoc = {!   !}
+    ; sym-assoc = λ { {X} → begin
+        _ ≈˘⟨ homomorphism F ⟩
+        _ ≈⟨ F-resp-≈ F C1 ⟩
+        _ ≈⟨ homomorphism F ⟩
+        _ ∎
+        }
     ; identityˡ = λ { {X} →
       Equiv.sym (homomorphism F) ∙
       F-resp-≈ F (homomorphism F ⟩∘⟨refl) ∙

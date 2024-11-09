@@ -18,17 +18,14 @@
             (agda.withPackages
               (ps: [
                 ps.standard-library
-                # ps.agda-categories
-                (ps.agda-categories.overrideAttrs (oldAttrs: {
-                  version = "local version";
-                  src = /Users/Brasolin/pb/agda-categories;
-                  # version = "bleeding edge";
-                  # src = fetchFromGitHub {
-                  #   repo = "agda-stdlib";
-                  #   owner = "agda";
-                  #   rev = "master";
-                  #   hash = "sha256-DfA1xE1ylk2O9Y9sE7fnK3T9/Zr2GMfmnzr9MHR5oHE=";
-                  # };
+                (ps.agda-categories.overrideAttrs (_: {
+                  version = "master";
+                  src = fetchFromGitHub {
+                    repo = "agda-categories";
+                    owner = "agda";
+                    rev = "master";
+                    hash = "sha256-BGmIKethGvWXMuLHkIYe9V1cvDDPsNIQz1/HdpRQvCo=";
+                  };
                 }))
               ]))
           ];

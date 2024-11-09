@@ -206,7 +206,20 @@ module _ {R : Contramonad} where
         _ ≈⟨ MR.assoc²γβ 𝓒 ⟩
         _ ∎
         }
-    ; sym-assoc = λ { {X} →  {!   !} }
+    ; sym-assoc = λ { {X} → begin
+        _ ≈˘⟨ MR.assoc²γβ 𝓒 ⟩
+        _ ≈˘⟨ homomorphism F ⟩∘⟨ C4 ⟩
+        _ ≈˘⟨ refl⟩∘⟨ MR.pullˡ 𝓒 (Equiv.sym C8) ⟩
+        _ ≈˘⟨ MR.pushˡ 𝓒 (homomorphism F) ⟩
+        _ ≈˘⟨ F-resp-≈ F (Equiv.sym C1) ⟩∘⟨refl ⟩
+        _ ≈˘⟨ MR.pullˡ 𝓒 (Equiv.sym (homomorphism F)) ⟩
+        _ ≈˘⟨ MR.push-center 𝓒 (Equiv.sym (homomorphism F²)) ⟩
+        _ ≈˘⟨ refl⟩∘⟨ Equiv.sym C2 ⟩
+        _ ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ refl⟩∘⟨ F-resp-≈ F² (MR.pullˡ 𝓒 (Equiv.sym (homomorphism F))) ⟩∘⟨refl ⟩
+        _ ≈˘⟨ Equiv.sym (homomorphism F) ⟩∘⟨refl ⟩
+        _ ≈˘⟨ MR.assoc²βγ 𝓒 ⟩
+        _ ∎
+        }
     ; identityˡ = λ { {X} →
       assoc ∙
       (refl⟩∘⟨ assoc) ∙

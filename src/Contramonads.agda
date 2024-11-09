@@ -192,7 +192,20 @@ module _ {R : Contramonad} where
       ; commute = λ { {X} {Y} f → {!   !}}
       -- one of the most difficult proofs...
       })
-    ; assoc = λ { {X} → {!   !} }
+    ; assoc = λ { {X} → begin
+        _ ≈⟨ MR.assoc²βγ 𝓒 ⟩
+        _ ≈⟨ Equiv.sym (homomorphism F) ⟩∘⟨refl ⟩
+        _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ refl⟩∘⟨ F-resp-≈ F² (MR.pullˡ 𝓒 (Equiv.sym (homomorphism F))) ⟩∘⟨refl ⟩
+        _ ≈⟨ refl⟩∘⟨ Equiv.sym C2 ⟩
+        _ ≈⟨ MR.push-center 𝓒 (Equiv.sym (homomorphism F²)) ⟩
+        _ ≈⟨ MR.pullˡ 𝓒 (Equiv.sym (homomorphism F)) ⟩
+        _ ≈⟨ F-resp-≈ F (Equiv.sym C1) ⟩∘⟨refl ⟩
+        _ ≈⟨ MR.pushˡ 𝓒 (homomorphism F) ⟩
+        _ ≈⟨ refl⟩∘⟨ MR.pullˡ 𝓒 (Equiv.sym C8) ⟩
+        _ ≈⟨ homomorphism F ⟩∘⟨ C4 ⟩
+        _ ≈⟨ MR.assoc²γβ 𝓒 ⟩
+        _ ∎
+        }
     ; sym-assoc = λ { {X} →  {!   !} }
     ; identityˡ = λ { {X} →
       assoc ∙

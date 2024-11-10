@@ -190,18 +190,19 @@ module _ {R : Contramonad} where
     ; μ = ntHelper (record
       { η = λ X → μ̂ {X}
       ; commute = λ { {X} {Y} f → begin -- see p.26, b4
-          -- (F (ι Y) ∘ F (δ Y) ∘ δ (F Y)) ∘ F (ι (F Y)) ∘ F (F (F (ι Y) ∘ F (F f) ∘ δ X)) ∘ δ (F X) -- this is B
           _ ≈⟨ MR.assoc²βγ 𝓒 ⟩
           _ ≈⟨ refl⟩∘⟨ Equiv.sym C2 ⟩
-          -- (F (ι Y) ∘ F (δ Y)) ∘ F (F (F (ι Y) ∘ F (F f) ∘ δ X)) ∘ δ (F X)
-          _ ≈⟨ {! !} ⟩ -- TODO: C8
-          _ ≈⟨ {! !} ⟩ -- TODO: C2
-          _ ≈⟨ {! !} ⟩ -- TODO: C1
-          -- (F (ι Y) ∘ F² f) ∘ (F (δ (F X) ∘ ι (F X)) ∘ F² (δ X)) ∘ δ (F X)
+          _ ≈⟨ MR.assoc²γδ 𝓒 ⟩
+          _ ≈⟨ refl⟩∘⟨ Equiv.sym (MR.pullˡ 𝓒 (Equiv.sym C8)) ⟩∘⟨refl ⟩
+          _ ≈⟨ refl⟩∘⟨ ( refl⟩∘⟨ (Equiv.sym (homomorphism F²))) ⟩∘⟨refl ⟩
+          _ ≈⟨ refl⟩∘⟨ ( refl⟩∘⟨ (F-resp-≈ F² (Equiv.sym C2) )) ⟩∘⟨refl ⟩
+          _ ≈⟨ refl⟩∘⟨ ( refl⟩∘⟨ (homomorphism F²)) ⟩∘⟨refl ⟩
+          _ ≈⟨ refl⟩∘⟨ MR.pullˡ 𝓒 (Equiv.sym (homomorphism F)) ⟩∘⟨refl ⟩
+          _ ≈⟨ refl⟩∘⟨ F-resp-≈ F (Equiv.sym C1) ⟩∘⟨refl ⟩∘⟨refl ⟩
+          _ ≈⟨ Equiv.sym (MR.center 𝓒 (MR.pullˡ 𝓒 (Equiv.sym (homomorphism F)))) ⟩
           _ ≈⟨ refl⟩∘⟨ Equiv.sym C8 ⟩∘⟨refl ⟩
           _ ≈⟨ refl⟩∘⟨ C4 ⟩
           _ ≈⟨ MR.assoc²γβ 𝓒 ⟩
-          -- (F (ι Y) ∘ F (F f) ∘ δ X) ∘ F (ι X) ∘ F (δ X) ∘ δ (F X) -- this is A
           _ ∎
           }
       })

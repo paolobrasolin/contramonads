@@ -154,11 +154,9 @@ module _ {R : Contramonad} where
       { η = λ X → F.F₁ (δ.α (F.F₀ X) ∘ ι.α (F.F₀ X))
       ; commute = λ f → begin
         _ ≈˘⟨ F.homomorphism ⟩
-        _ ≈⟨ F.F-resp-≈ (refl⟩∘⟨ (refl⟩∘⟨ Equiv.sym (antiCommute⁻⁺ ι {f = F.F₁ f}))) ⟩
-        _ ≈⟨ F.F-resp-≈ (sym-assoc ○ sym-assoc ○ sym-assoc) ⟩
-        _ ≈⟨ F.F-resp-≈ (assoc ○ assoc ⟩∘⟨refl) ⟩
-        _ ≈⟨ F.F-resp-≈ sym-assoc ⟩
-        _ ≈⟨ F.F-resp-≈ ((antiCommute⁺⁻ δ {f = F.F₁ f} ⟩∘⟨refl) ⟩∘⟨refl) ⟩
+        _ ≈⟨ F.F-resp-≈ (refl⟩∘⟨ pushʳ (Equiv.sym (antiCommute⁻⁺ ι {f = F.F₁ f})) ) ⟩
+        _ ≈⟨ F.F-resp-≈ assoc²εβ ⟩
+        _ ≈⟨ F.F-resp-≈ ( pullˡ (antiCommute⁺⁻ δ {f = F.F₁ f}) ⟩∘⟨refl) ⟩
         _ ≈⟨ F.homomorphism ⟩
         _ ∎
       })

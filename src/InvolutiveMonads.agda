@@ -25,10 +25,17 @@ open import Contramonads
 open import Categories.Category.Equivalence using (WeakInverse)
 open import Categories.Category.Construction.Kleisli
 open import Categories.Adjoint.Construction.Kleisli
+open import Agda.Builtin.Equality using (_≡_; refl)
 
 record Involution (C : Category o l e) : Set (o ⊔ l ⊔ e) where
   field
     I   : Functor (Category.op C) C
+
+  module 𝐈 = Functor I
+  
+  field
+    p   : ∀ {X} → 𝐈.F₀ X ≡ X 
+    -- we need I.F₀ ≡ id; prolly a less evil way to do it
     inv : WeakInverse I (Functor.op I)
 
 open Involution
@@ -39,6 +46,7 @@ record InvolutiveMonad : Set (o ⊔ l ⊔ e) where
     klInvol : Involution (Kleisli M)
 
 open InvolutiveMonad
+
 
 Contra→Invol : Contramonad {𝓒 = 𝓒} → InvolutiveMonad
 Contra→Invol R = record
@@ -85,14 +93,26 @@ Contra→Invol R = record
     }
   } where open module R = Contramonad R
 
+
 Invol→Contra : (𝓘𝓥 : InvolutiveMonad) → Contramonad {𝓒 = 𝓒}
 Invol→Contra 𝓘𝓥 = record
-  { F = {!   !} -- Functor.op (Free (M 𝓘𝓥)) ∘F I klInvol 𝓘𝓥 ∘F Forgetful (M 𝓘𝓥)
-  ; ι = {!   !}
-  ; δ = {!   !}
+  { F = Forgetful (M 𝓘𝓥) ∘F 𝐈 ∘F Functor.op (Free (M 𝓘𝓥))
+  ; ι = record 
+    { α = λ { X → M.F.F₁ {! !} ∘ M.η.η X }
+    ; commute = {! !} 
+    ; op-commute = {! !} 
+    }
+  ; δ = record 
+    { α = λ { X → {! !} } 
+    ; commute = {! !} 
+    ; op-commute = {! !} 
+    }
   ; C1 = {!   !}
   ; C2 = {!   !}
   ; C3 = {!   !}
   ; C4 = {!   !}
-  } where 𝐈 = Functor.op (I (klInvol 𝓘𝓥))
+  } where 𝐈 = I (klInvol 𝓘𝓥)
+          I₀≡1 = p (klInvol 𝓘𝓥)
+          module M = Monad (M 𝓘𝓥)
+  
 

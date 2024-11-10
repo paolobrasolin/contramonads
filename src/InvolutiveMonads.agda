@@ -78,7 +78,10 @@ Contra→Invol R = record
         _ ∎}
       ; F-resp-≈ = λ { x → F.F-resp-≈ x ⟩∘⟨refl }
       }
-    ; inv = {!   !}
+    ; inv = record 
+      { F∘G≈id = record { F⇒G = {! !} ; F⇐G = {! !} ; iso = {! !} } 
+      ; G∘F≈id = record { F⇒G = {! !} ; F⇐G = {! !} ; iso = {! !} } 
+      }
     }
   } where open module R = Contramonad R
 

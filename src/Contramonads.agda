@@ -63,7 +63,7 @@ record Contramonad : Set (o ⊔ l ⊔ e) where
   module δ = Dinat δ
   module F² = Functor F²
 
-  -- AXIOMS CHEATSHEET
+  -- CHEATSHEET
   -- C1 : (δ B ∘ ι B) ∘ f             ≈ F² f ∘ δ A ∘ ι A
   -- C2 : F² f ∘ δ A                  ≈ δ B ∘ F (ι B) ∘ F² f ∘ δ A
   -- C3 : id                          ≈ F (ι A) ∘ F (δ A) ∘ δ (F A) ∘ ι (F A)
@@ -92,55 +92,52 @@ record Contramonad : Set (o ⊔ l ⊔ e) where
   μ̂ : ∀ {X : Obj} → F².F₀ X ⇒ F.F₀ X
   μ̂ {X} = F.F₁ (ι.α X) ∘ F.F₁ (δ.α X) ∘ δ.α (F.F₀ X)
 
-  module _ where
-    open Functor
+  C5 : ∀ {A B : Obj} (f : A ⇒ B) →
+    F.F₁ (δ.α A) ∘ F.F₁ (F².F₁ f) ≈ F.F₁ (δ.α A) ∘ F.F₁ (F².F₁ f) ∘ F².F₁ (ι.α B) ∘ F.F₁ (δ.α B)
+  C5 f =
+    Equiv.sym (F.homomorphism) ∙
+    F.F-resp-≈ C2 ∙
+    F.F-resp-≈ (sym-assoc ∙ sym-assoc) ∙
+    homomorphism₄ F
 
-    C5 : ∀ {A B : Obj} (f : A ⇒ B) →
-      F.F₁ (δ.α A) ∘ F.F₁ (F².F₁ f) ≈ F.F₁ (δ.α A) ∘ F.F₁ (F².F₁ f) ∘ F².F₁ (ι.α B) ∘ F.F₁ (δ.α B)
-    C5 f =
-      Equiv.sym (homomorphism F) ∙
-      F.F-resp-≈ C2 ∙
-      F.F-resp-≈ (sym-assoc ∙ sym-assoc) ∙
-      homomorphism₄ F
+  𝐏-unit-lemma : ∀ {A : Obj} → δ.α A ≈ F.F₁ (δ.α A) ∘ δ.α (F.F₀ A) ∘ ι.α (F.F₀ A)
+  𝐏-unit-lemma =
+    begin
+    _ ≈˘⟨ identityʳ ⟩
+    _ ≈⟨ (refl⟩∘⟨ C3) ⟩
+    _ ≈˘⟨ assoc ○ assoc ○ assoc ⟩
+    _ ≈⟨ ((assoc ○ assoc ○ Equiv.sym C4 ) ⟩∘⟨refl) ⟩
+    _ ≈⟨ assoc ⟩
+    _ ∎ -- TODO: refactor
 
-    𝐏-unit-lemma : ∀ {A : Obj} → δ.α A ≈ F.F₁ (δ.α A) ∘ δ.α (F.F₀ A) ∘ ι.α (F.F₀ A)
-    𝐏-unit-lemma =
-      begin
-      _ ≈˘⟨ identityʳ ⟩
-      _ ≈⟨ (refl⟩∘⟨ C3) ⟩
-      _ ≈˘⟨ assoc ○ assoc ○ assoc ⟩
-      _ ≈⟨ ((assoc ○ assoc ○ Equiv.sym C4 ) ⟩∘⟨refl) ⟩
-      _ ≈⟨ assoc ⟩
-      _ ∎ -- TODO: refactor
+  C6 : ∀ {X : Obj} →
+    F.F₁ (ι.α X) ∘ δ.α X ≈ id
+  C6 {X} = (refl⟩∘⟨ 𝐏-unit-lemma) ○ Equiv.sym C3
 
-    C6 : ∀ {X : Obj} →
-      F.F₁ (ι.α X) ∘ δ.α X ≈ id
-    C6 {X} = (refl⟩∘⟨ 𝐏-unit-lemma) ○ Equiv.sym C3
+  C7 : ∀ {X : Obj} →
+    F.F₁ (δ.α X) ∘ η̂ (F.F₀ X) ≈ δ.α X
+  C7 {X} = begin
+    _ ≈⟨ pullˡ C4 ⟩
+    _ ≈⟨ assoc ○ refl⟩∘⟨ assoc ○ (refl⟩∘⟨ (refl⟩∘⟨ assoc)) ⟩ -- TODO: refactor ugly assoc.
+    _ ≈⟨ elimʳ (Equiv.sym C3) ⟩
+    _ ∎
 
-    C7 : ∀ {X : Obj} →
-      F.F₁ (δ.α X) ∘ η̂ (F.F₀ X) ≈ δ.α X
-    C7 {X} = begin
-      _ ≈⟨ pullˡ C4 ⟩
-      _ ≈⟨ assoc ○ refl⟩∘⟨ assoc ○ (refl⟩∘⟨ (refl⟩∘⟨ assoc)) ⟩ -- TODO: refactor ugly assoc.
-      _ ≈⟨  elimʳ (Equiv.sym C3) ⟩
-      _ ∎
+  C8 : ∀ {X : Obj} →
+    F.F₁ (δ.α X) ≈ F.F₁ (η̂ (F.F₀ X)) ∘ F².F₁ (δ.α X)
+  C8 {X} = F.F-resp-≈ (Equiv.sym C7) ○ F.homomorphism
 
-    C8 : ∀ {X : Obj} →
-      F.F₁ (δ.α X) ≈ F.F₁ (η̂ (F.F₀ X)) ∘ F².F₁ (δ.α X)
-    C8 {X} = F-resp-≈ F (Equiv.sym C7) ○ homomorphism F
-
-    𝐏Functor : Endofunctor 𝓒
-    𝐏Functor = record
-      { F₀ = λ X → F₀ F X
-      ; F₁ = λ f → 𝐏 f
-      ; identity = λ { {A} → elim-center (identity F²) ○ C6 }
-      ; homomorphism = λ { {X} {Y} {Z} {f} {g} → Equiv.sym (
-        assoc ∙ (refl⟩∘⟨ assoc) ∙
-        (refl⟩∘⟨ refl⟩∘⟨ Equiv.sym C2) ∙
-        pull-center (Equiv.sym (homomorphism F²))
-        )}
-      ; F-resp-≈ = λ f≈g → refl⟩∘⟨ (F-resp-≈ F² f≈g ⟩∘⟨refl)
-      } where open Functor
+  𝐏Functor : Endofunctor 𝓒
+  𝐏Functor = record
+    { F₀ = λ X → F.F₀ X
+    ; F₁ = λ f → 𝐏 f
+    ; identity = λ { {A} → elim-center (F².identity) ○ C6 }
+    ; homomorphism = λ { {X} {Y} {Z} {f} {g} → Equiv.sym (
+      assoc ∙ (refl⟩∘⟨ assoc) ∙
+      (refl⟩∘⟨ refl⟩∘⟨ Equiv.sym C2) ∙
+      pull-center (Equiv.sym (F².homomorphism))
+      )}
+    ; F-resp-≈ = λ f≈g → refl⟩∘⟨ (F².F-resp-≈ f≈g ⟩∘⟨refl)
+    }
 
 module _ {R : Contramonad} where
 

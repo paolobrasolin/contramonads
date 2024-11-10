@@ -1,21 +1,23 @@
 {-# OPTIONS --without-K --allow-unsolved-metas #-}
 
-open import Categories.Category
-open import Categories.Functor renaming (id to idF)
+open import Categories.Category using (Category)
+open import Categories.Functor using (Functor; _∘F_; Endofunctor) renaming (id to idF)
 open import MyCategories.Functor.Properties using ([_]-elim)
-open import Categories.Category.Core
+-- open import Categories.Category.Core
 
 module Contramonads {o l e} {𝓒 : Category o l e} where
 
 open import Level
 
-open import Categories.Monad hiding (id)
+open import Categories.Monad using (Monad)
 open import MyCategories.Monad using (monadMap)
 open import Categories.NaturalTransformation.Dinatural renaming (DinaturalTransformation to Dinat)
-open import Categories.Category.Product
+open Dinat
+open import Categories.Category.Product using (Product; πˡ; πʳ)
 open import Categories.NaturalTransformation.Core renaming (id to idN)
-open import Categories.NaturalTransformation.NaturalIsomorphism hiding (refl)
+-- open import Categories.NaturalTransformation.NaturalIsomorphism hiding (refl)
 import Categories.Morphism.Reasoning as MR
+open MR 𝓒
 
 open import BetterReasoning 𝓒
 open Chain
@@ -33,9 +35,6 @@ liftF⁻ F = F ∘F πʳ
 
 liftF⁺ : Functor (Category.op 𝓒) 𝓓 → Functor (𝓒 ᵒ× 𝓒) 𝓓
 liftF⁺ F = F ∘F πˡ
-
-open Dinat
-open MR 𝓒
 
 antiCommute⁻⁺ : {H : Functor 𝓒 𝓒} {G : Functor (Category.op 𝓒) 𝓒} (θ : Dinat (liftF⁻ H) (liftF⁺ G)) →
   ∀ {A B} {f : A ⇒ B} → Functor.F₁ G f ∘ α θ B ∘ Functor.F₁ H f ≈ α θ A

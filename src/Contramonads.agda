@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --safe #-}
 
 open import Categories.Category using (Category)
 open import Categories.Functor using (Functor; _∘F_; Endofunctor) renaming (id to idF)

@@ -189,8 +189,21 @@ module _ {R : Contramonad} where
       })
     ; μ = ntHelper (record
       { η = λ X → μ̂ {X}
-      ; commute = λ { {X} {Y} f → {!   !}}
-      -- one of the most difficult proofs...
+      ; commute = λ { {X} {Y} f → begin -- see p.26, b4
+          -- (F (ι Y) ∘ F (δ Y) ∘ δ (F Y)) ∘ F (ι (F Y)) ∘ F (F (F (ι Y) ∘ F (F f) ∘ δ X)) ∘ δ (F X) -- this is B
+          _ ≈⟨ MR.assoc²βγ 𝓒 ⟩
+          _ ≈⟨ refl⟩∘⟨ Equiv.sym C2 ⟩
+          -- (F (ι Y) ∘ F (δ Y)) ∘ F (F (F (ι Y) ∘ F (F f) ∘ δ X)) ∘ δ (F X)
+          _ ≈⟨ {! !} ⟩ -- TODO: C8
+          _ ≈⟨ {! !} ⟩ -- TODO: C2
+          _ ≈⟨ {! !} ⟩ -- TODO: C1
+          -- (F (ι Y) ∘ F² f) ∘ (F (δ (F X) ∘ ι (F X)) ∘ F² (δ X)) ∘ δ (F X)
+          _ ≈⟨ refl⟩∘⟨ Equiv.sym C8 ⟩∘⟨refl ⟩
+          _ ≈⟨ refl⟩∘⟨ C4 ⟩
+          _ ≈⟨ MR.assoc²γβ 𝓒 ⟩
+          -- (F (ι Y) ∘ F (F f) ∘ δ X) ∘ F (ι X) ∘ F (δ X) ∘ δ (F X) -- this is A
+          _ ∎
+          }
       })
     ; assoc = λ { {X} → begin
         _ ≈⟨ MR.assoc²βγ 𝓒 ⟩

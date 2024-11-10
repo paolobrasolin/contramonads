@@ -15,6 +15,7 @@ open import Categories.Category.Product
 open import Categories.NaturalTransformation.Core renaming (id to idN)
 open import Categories.NaturalTransformation.NaturalIsomorphism hiding (refl)
 import Categories.Morphism.Reasoning as MR
+open MR 𝓒
 
 open import BetterReasoning 𝓒
 open Chain
@@ -45,14 +46,14 @@ Contra→Invol R = record
   ; klInvol = record
     { I = record
       { F₀ = λ x → x
-      ; F₁ = λ { {B} {A} f → {!   !} ∘ R.η̂ B }
-      ; identity = {!   !}
+      ; F₁ = λ { {B} {A} f → F.F₁ f ∘ R.η̂ B }
+      ; identity = MR.cancelˡ 𝓒 C6
       ; homomorphism = {!   !}
-      ; F-resp-≈ = {!   !}
+      ; F-resp-≈ = λ { x → F.F-resp-≈ x ⟩∘⟨refl }
       }
     ; inv = {!   !}
     }
-  } where module R = Contramonad R
+  } where open module R = Contramonad R
 
 Invol→Contra : (𝓘𝓥 : InvolutiveMonad) → Contramonad {𝓒 = 𝓒}
 Invol→Contra 𝓘𝓥 = record

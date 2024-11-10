@@ -36,15 +36,17 @@ liftF⁻ F = F ∘F πʳ
 liftF⁺ : Functor (Category.op 𝓒) 𝓓 → Functor (𝓒 ᵒ× 𝓒) 𝓓
 liftF⁺ F = F ∘F πˡ
 
-antiCommute⁻⁺ : {H : Functor 𝓒 𝓒} {G : Functor (Category.op 𝓒) 𝓒} (θ : Dinat (liftF⁻ H) (liftF⁺ G)) →
-  ∀ {A B} {f : A ⇒ B} → Functor.F₁ G f ∘ α θ B ∘ Functor.F₁ H f ≈ α θ A
-antiCommute⁻⁺ {H} {G} θ {A} {B} {f} = Equiv.sym (commute θ f) ∙ elimˡ (identity G) ∙ elimʳ (identity H)
-  where open Functor
+module _ {H : Functor 𝓒 𝓒} {G : Functor (Category.op 𝓒) 𝓒} where
+  open module H = Functor H
+  open module G = Functor G
 
-antiCommute⁺⁻ : {G : Functor 𝓒 𝓒} {H : Functor (Category.op 𝓒) 𝓒} (θ : Dinat (liftF⁺ H) (liftF⁻ G)) →
-  ∀ {A B} {f : A ⇒ B} → Functor.F₁ G f ∘ α θ A ∘ Functor.F₁ H f ≈ α θ B
-antiCommute⁺⁻ {G} {H} θ {A} {B} {f} = commute θ f ∙ (elimˡ (identity G) ∙ elimʳ (identity H))
-  where open Functor
+  antiCommute⁻⁺ : (θ : Dinat (liftF⁻ H) (liftF⁺ G)) → ∀ {A B} {f : A ⇒ B} → G.F₁ f ∘ α θ B ∘ H.F₁ f ≈ α θ A
+  antiCommute⁻⁺ θ {A} {B} {f} = Equiv.sym (θ.commute f) ∙ elimˡ G.identity ∙ elimʳ H.identity
+    where open module θ = Dinat θ
+
+  antiCommute⁺⁻ : (θ : Dinat (liftF⁺ G) (liftF⁻ H)) → ∀ {A B} {f : A ⇒ B} → H.F₁ f ∘ α θ A ∘ G.F₁ f ≈ α θ B
+  antiCommute⁺⁻ θ {A} {B} {f} = θ.commute f ∙ elimˡ H.identity ∙ elimʳ G.identity
+    where open module θ = Dinat θ
 
 record Contramonad : Set (o ⊔ l ⊔ e) where
   field

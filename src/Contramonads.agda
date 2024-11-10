@@ -35,15 +35,16 @@ liftF⁺ : Functor (Category.op 𝓒) 𝓓 → Functor (𝓒 ᵒ× 𝓒) 𝓓
 liftF⁺ F = F ∘F πˡ
 
 open Dinat
+open MR 𝓒
 
 antiCommute⁻⁺ : {H : Functor 𝓒 𝓒} {G : Functor (Category.op 𝓒) 𝓒} (θ : Dinat (liftF⁻ H) (liftF⁺ G)) →
   ∀ {A B} {f : A ⇒ B} → Functor.F₁ G f ∘ α θ B ∘ Functor.F₁ H f ≈ α θ A
-antiCommute⁻⁺ {H} {G} θ {A} {B} {f} = Equiv.sym (commute θ f) ∙ MR.elimˡ 𝓒 (identity G) ∙ MR.elimʳ 𝓒 (identity H)
+antiCommute⁻⁺ {H} {G} θ {A} {B} {f} = Equiv.sym (commute θ f) ∙ elimˡ (identity G) ∙ elimʳ (identity H)
   where open Functor
 
 antiCommute⁺⁻ : {G : Functor 𝓒 𝓒} {H : Functor (Category.op 𝓒) 𝓒} (θ : Dinat (liftF⁺ H) (liftF⁻ G)) →
   ∀ {A B} {f : A ⇒ B} → Functor.F₁ G f ∘ α θ A ∘ Functor.F₁ H f ≈ α θ B
-antiCommute⁺⁻ {G} {H} θ {A} {B} {f} = commute θ f ∙ (MR.elimˡ 𝓒 (identity G) ∙ MR.elimʳ 𝓒 (identity H))
+antiCommute⁺⁻ {G} {H} θ {A} {B} {f} = commute θ f ∙ (elimˡ (identity G) ∙ elimʳ (identity H))
   where open Functor
 
 record Contramonad : Set (o ⊔ l ⊔ e) where
@@ -118,9 +119,9 @@ record Contramonad : Set (o ⊔ l ⊔ e) where
     C7 : ∀ {X : Obj} →
       F.F₁ (δ.α X) ∘ η̂ (F.F₀ X) ≈ δ.α X
     C7 {X} = begin
-      _ ≈⟨ MR.pullˡ 𝓒 C4 ⟩
+      _ ≈⟨ pullˡ C4 ⟩
       _ ≈⟨ assoc ○ refl⟩∘⟨ assoc ○ (refl⟩∘⟨ (refl⟩∘⟨ assoc)) ⟩ -- TODO: refactor ugly assoc.
-      _ ≈⟨  MR.elimʳ 𝓒 (Equiv.sym C3) ⟩
+      _ ≈⟨  elimʳ (Equiv.sym C3) ⟩
       _ ∎
 
     C8 : ∀ {X : Obj} →
@@ -131,11 +132,11 @@ record Contramonad : Set (o ⊔ l ⊔ e) where
     𝐏Functor = record
       { F₀ = λ X → F₀ F X
       ; F₁ = λ f → 𝐏 f
-      ; identity = λ { {A} → MR.elim-center 𝓒 (identity F²) ○ C6 }
+      ; identity = λ { {A} → elim-center (identity F²) ○ C6 }
       ; homomorphism = λ { {X} {Y} {Z} {f} {g} → Equiv.sym (
         assoc ∙ (refl⟩∘⟨ assoc) ∙
         (refl⟩∘⟨ refl⟩∘⟨ Equiv.sym C2) ∙
-        MR.pull-center 𝓒 (Equiv.sym (homomorphism F²))
+        pull-center (Equiv.sym (homomorphism F²))
         )}
       ; F-resp-≈ = λ f≈g → refl⟩∘⟨ (F-resp-≈ F² f≈g ⟩∘⟨refl)
       } where open Functor
@@ -193,55 +194,55 @@ module _ {R : Contramonad} where
     ; η = ntHelper (record
       { η = λ X → ι.α X
       ; commute = λ { {X} {Y} f →
-        Equiv.sym (MR.pullʳ 𝓒 (assoc ∙ Equiv.sym C1) ∙
-        MR.assoc²δγ 𝓒 ∙
-        MR.elimˡ 𝓒 C6)}
+        Equiv.sym (pullʳ (assoc ∙ Equiv.sym C1) ∙
+        assoc²δγ ∙
+        elimˡ C6)}
       })
     ; μ = ntHelper (record
       { η = λ X → μ̂ {X}
       ; commute = λ { {X} {Y} f → begin -- see p.26, b4
-          _ ≈⟨ MR.assoc²βγ 𝓒 ⟩
+          _ ≈⟨ assoc²βγ ⟩
           _ ≈⟨ refl⟩∘⟨ Equiv.sym C2 ⟩
-          _ ≈⟨ MR.assoc²γδ 𝓒 ⟩
-          _ ≈⟨ refl⟩∘⟨ Equiv.sym (MR.pullˡ 𝓒 (Equiv.sym C8)) ⟩∘⟨refl ⟩
+          _ ≈⟨ assoc²γδ ⟩
+          _ ≈⟨ refl⟩∘⟨ Equiv.sym (pullˡ (Equiv.sym C8)) ⟩∘⟨refl ⟩
           _ ≈⟨ refl⟩∘⟨ ( refl⟩∘⟨ (Equiv.sym (homomorphism F²))) ⟩∘⟨refl ⟩
           _ ≈⟨ refl⟩∘⟨ ( refl⟩∘⟨ (F-resp-≈ F² (Equiv.sym C2) )) ⟩∘⟨refl ⟩
           _ ≈⟨ refl⟩∘⟨ ( refl⟩∘⟨ (homomorphism F²)) ⟩∘⟨refl ⟩
-          _ ≈⟨ refl⟩∘⟨ MR.pullˡ 𝓒 (Equiv.sym (homomorphism F)) ⟩∘⟨refl ⟩
+          _ ≈⟨ refl⟩∘⟨ pullˡ (Equiv.sym (homomorphism F)) ⟩∘⟨refl ⟩
           _ ≈⟨ refl⟩∘⟨ F-resp-≈ F (Equiv.sym C1) ⟩∘⟨refl ⟩∘⟨refl ⟩
-          _ ≈⟨ Equiv.sym (MR.center 𝓒 (MR.pullˡ 𝓒 (Equiv.sym (homomorphism F)))) ⟩
+          _ ≈⟨ Equiv.sym (center (pullˡ (Equiv.sym (homomorphism F)))) ⟩
           _ ≈⟨ refl⟩∘⟨ Equiv.sym C8 ⟩∘⟨refl ⟩
           _ ≈⟨ refl⟩∘⟨ C4 ⟩
-          _ ≈⟨ MR.assoc²γβ 𝓒 ⟩
+          _ ≈⟨ assoc²γβ ⟩
           _ ∎
           }
       })
     ; assoc = λ { {X} → begin
-        _ ≈⟨ MR.assoc²βγ 𝓒 ⟩
+        _ ≈⟨ assoc²βγ ⟩
         _ ≈⟨ Equiv.sym (homomorphism F) ⟩∘⟨refl ⟩
-        _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ refl⟩∘⟨ F-resp-≈ F² (MR.pullˡ 𝓒 (Equiv.sym (homomorphism F))) ⟩∘⟨refl ⟩
+        _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ refl⟩∘⟨ F-resp-≈ F² (pullˡ (Equiv.sym (homomorphism F))) ⟩∘⟨refl ⟩
         _ ≈⟨ refl⟩∘⟨ Equiv.sym C2 ⟩
-        _ ≈⟨ MR.push-center 𝓒 (Equiv.sym (homomorphism F²)) ⟩
-        _ ≈⟨ MR.pullˡ 𝓒 (Equiv.sym (homomorphism F)) ⟩
+        _ ≈⟨ push-center (Equiv.sym (homomorphism F²)) ⟩
+        _ ≈⟨ pullˡ (Equiv.sym (homomorphism F)) ⟩
         _ ≈⟨ F-resp-≈ F (Equiv.sym C1) ⟩∘⟨refl ⟩
-        _ ≈⟨ MR.pushˡ 𝓒 (homomorphism F) ⟩
-        _ ≈⟨ refl⟩∘⟨ MR.pullˡ 𝓒 (Equiv.sym C8) ⟩
+        _ ≈⟨ pushˡ (homomorphism F) ⟩
+        _ ≈⟨ refl⟩∘⟨ pullˡ (Equiv.sym C8) ⟩
         _ ≈⟨ homomorphism F ⟩∘⟨ C4 ⟩
-        _ ≈⟨ MR.assoc²γβ 𝓒 ⟩
+        _ ≈⟨ assoc²γβ ⟩
         _ ∎
         }
     ; sym-assoc = λ { {X} → begin
-        _ ≈˘⟨ MR.assoc²γβ 𝓒 ⟩
+        _ ≈˘⟨ assoc²γβ ⟩
         _ ≈˘⟨ homomorphism F ⟩∘⟨ C4 ⟩
-        _ ≈˘⟨ refl⟩∘⟨ MR.pullˡ 𝓒 (Equiv.sym C8) ⟩
-        _ ≈˘⟨ MR.pushˡ 𝓒 (homomorphism F) ⟩
+        _ ≈˘⟨ refl⟩∘⟨ pullˡ (Equiv.sym C8) ⟩
+        _ ≈˘⟨ pushˡ (homomorphism F) ⟩
         _ ≈˘⟨ F-resp-≈ F (Equiv.sym C1) ⟩∘⟨refl ⟩
-        _ ≈˘⟨ MR.pullˡ 𝓒 (Equiv.sym (homomorphism F)) ⟩
-        _ ≈˘⟨ MR.push-center 𝓒 (Equiv.sym (homomorphism F²)) ⟩
+        _ ≈˘⟨ pullˡ (Equiv.sym (homomorphism F)) ⟩
+        _ ≈˘⟨ push-center (Equiv.sym (homomorphism F²)) ⟩
         _ ≈˘⟨ refl⟩∘⟨ Equiv.sym C2 ⟩
-        _ ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ refl⟩∘⟨ F-resp-≈ F² (MR.pullˡ 𝓒 (Equiv.sym (homomorphism F))) ⟩∘⟨refl ⟩
+        _ ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ refl⟩∘⟨ F-resp-≈ F² (pullˡ (Equiv.sym (homomorphism F))) ⟩∘⟨refl ⟩
         _ ≈˘⟨ Equiv.sym (homomorphism F) ⟩∘⟨refl ⟩
-        _ ≈˘⟨ MR.assoc²βγ 𝓒 ⟩
+        _ ≈˘⟨ assoc²βγ ⟩
         _ ∎
         }
     ; identityˡ = λ { {X} →
@@ -249,10 +250,10 @@ module _ {R : Contramonad} where
       (refl⟩∘⟨ assoc) ∙
       (skip-2 (Equiv.sym C2)) ∙
       (refl⟩∘⟨ sym-assoc) ∙
-      (MR.elim-center 𝓒 (Equiv.sym (homomorphism F) ∙ [ F ]-elim C6)) ∙
+      (elim-center (Equiv.sym (homomorphism F) ∙ [ F ]-elim C6)) ∙
       C6
       }
-    ; identityʳ = λ { {X} → MR.assoc²βε 𝓒 ∙ Equiv.sym C3}
+    ; identityʳ = λ { {X} → assoc²βε ∙ Equiv.sym C3}
     } where open Functor
 
   ζ : monadMap 𝐏Monad F²Monad

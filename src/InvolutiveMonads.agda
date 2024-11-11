@@ -53,16 +53,18 @@ record InvolutiveMonad : Set (o ⊔ l ⊔ e) where
     klInvol : Involution (Kleisli M)
 
 open InvolutiveMonad
+open IdentityOnObjects
 
 
 Contra→Invol : Contramonad {𝓒 = C} → InvolutiveMonad
-Contra→Invol R = record 
+Contra→Invol R = record
   { M = 𝐏Monad {R = R}
-  ; klInvol = record 
-    { I = record 
+  ; klInvol = record
+    { I = record
       { F₁ = λ { {B} {A} f → F.F₁ f ∘ R.η̂ B }
       ; identity = MR.cancelˡ C C6
-      ; homomorphism = λ { {Z} {Y} {X} {v} {r} → begin -- see p.28, d2
+      ; homomorphism = {! !} -- λ { {Z} {Y} {X} {v} {r} → begin -- see p.28, d2
+{-
         _ ≈⟨ F.homomorphism ⟩∘⟨refl ⟩
         _ ≈⟨ (refl⟩∘⟨ F.homomorphism) ⟩∘⟨refl ⟩
         _ ≈⟨ sym-assoc ⟩∘⟨refl ⟩
@@ -80,39 +82,43 @@ Contra→Invol R = record
         _ ≈⟨ Equiv.sym (MR.center C (Equiv.sym F.homomorphism)) ⟩∘⟨refl ⟩
         _ ≈⟨ Equiv.sym F.homomorphism ⟩∘⟨refl ⟩∘⟨refl ⟩
         _ ≈⟨ F.F-resp-≈ (Monad.η.commute (F²Monad {R = R}) r) ⟩∘⟨refl ⟩∘⟨refl ⟩
-        _ ≈⟨ F.homomorphism ⟩∘⟨refl ⟩∘⟨refl ⟩
-        _ ≈⟨ F.homomorphism ⟩∘⟨refl ⟩∘⟨refl ⟩∘⟨refl ⟩
+        _ ≈⟨ F.homomorphism ⟩∘⟨refl ⟩∘⟨refl
+_ ≈⟨ F.homomorphism ⟩∘⟨refl ⟩∘⟨refl ⟩∘⟨refl ⟩
         _ ≈⟨ MR.assoc²γδ C ⟩∘⟨refl ⟩
         _ ≈⟨ (refl⟩∘⟨ Equiv.sym F².homomorphism ⟩∘⟨refl) ⟩∘⟨refl ⟩
         _ ≈⟨ (refl⟩∘⟨ C2) ⟩∘⟨refl ⟩
         _ ≈⟨ sym-assoc ⟩∘⟨refl ⟩
         _ ≈⟨ assoc ⟩∘⟨refl ⟩∘⟨refl ⟩
         _ ∎}
+-}
       ; F-resp-≈ = λ { x → F.F-resp-≈ x ⟩∘⟨refl }
-      } 
-    ; inv = {! !} 
-    } 
+      }
+    ; inv = record
+      { F∘G≈id = {! !}
+      ; G∘F≈id = {! !}
+      }
+    }
   } where open module R = Contramonad R
 
 Invol→Contra : (IM : InvolutiveMonad) → Contramonad {𝓒 = C}
 Invol→Contra IM = record
   { F = Forgetful (M IM) ∘F II ∘F Functor.op (Free (M IM))
-  ; ι = record 
-    { α = λ { X →  M.μ.η X ∘ 𝐈.F₁ id } -- ∘ 𝐈.F₁ id }
-    ; commute = {! !} 
-    ; op-commute = {! !} 
+  ; ι = record
+    { α = λ { X →  M.μ.η X ∘ 𝐈.F₁ id }
+    ; commute = λ { f → {! !} }
+    ; op-commute = λ { f → {! !} }
     }
-  ; δ = record 
-    { α = λ { X → M.μ.η (M.F.F₀ X) ∘ M.F.F₁ (𝐈.F₁ id) } -- ∘ M.F.F₁ (M.F.F₁ id ∘ M.η.η X) } 
-    ; commute = {! !} 
-    ; op-commute = {! !} 
+  ; δ = record
+    { α = λ { X → M.μ.η (M.F.F₀ X) ∘ M.F.F₁ (𝐈.F₁ id) }
+    ; commute = λ { f → {! !} }
+    ; op-commute = λ { f → {! !} }
     }
-  ; C1 = {!   !}
-  ; C2 = {!   !}
-  ; C3 = {!   !}
-  ; C4 = {!   !}
+  ; C1 = λ { {A} {B} {f} → {!  !} }
+  ; C2 = λ { {A} {B} {f} → {! !} }
+  ; C3 = λ { {A} → {! !} }
+  ; C4 = λ { {A} → {! !} }
   } where II = IOO⇒Functor (I (klInvol IM))
           module M = Monad (M IM)
           module 𝐈 = Functor II
-  
+
 

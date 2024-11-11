@@ -113,12 +113,12 @@ Invol→Contra : (IM : InvolutiveMonad) → Contramonad {𝓒 = C}
 Invol→Contra IM = record
   { F = Forgetful (M IM) ∘F II ∘F Functor.op (Free (M IM))
   ; ι = record 
-    { α = λ { X → M.F.F₁ {! !} ∘ M.η.η X }
+    { α = λ { X →  M.μ.η X ∘ 𝐈.F₁ id } -- ∘ 𝐈.F₁ id }
     ; commute = {! !} 
     ; op-commute = {! !} 
     }
   ; δ = record 
-    { α = λ { X → {! !} } 
+    { α = λ { X → M.μ.η (M.F.F₀ X) ∘ M.F.F₁ (𝐈.F₁ id) } -- ∘ M.F.F₁ (M.F.F₁ id ∘ M.η.η X) } 
     ; commute = {! !} 
     ; op-commute = {! !} 
     }
@@ -128,5 +128,6 @@ Invol→Contra IM = record
   ; C4 = {!   !}
   } where II = IOO⇒Functor (I (klInvol IM))
           module M = Monad (M IM)
+          module 𝐈 = Functor II
   
 

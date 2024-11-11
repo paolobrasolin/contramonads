@@ -30,13 +30,13 @@ open import Categories.Category.Construction.Kleisli
 open import Categories.Adjoint.Construction.Kleisli
 open import Agda.Builtin.Equality using (_≡_; refl)
 open import Categories.Category.Unbundled.Utilities using (op)
-open import Categories.Category.Unbundled.Properties using (unpack)
+open import Categories.Category.Unbundled.Properties using (pack′;unpack′)
 
 record Involution (C : Category o l e) : Set (o ⊔ l ⊔ e) where
   Cᴼ = Category.op C
 
   field
-    I   : IdentityOnObjects (snd (unpack Cᴼ)) (snd (unpack C))
+    I   : IdentityOnObjects (unpack′ Cᴼ) (unpack′ C)
     -- one can refactor better and use Unbundled's "op"
 
   module FI = Functor (IOO⇒Functor I)
@@ -52,9 +52,16 @@ record InvolutiveMonad : Set (o ⊔ l ⊔ e) where
     M : Monad C
     klInvol : Involution (Kleisli M)
 
+
 open InvolutiveMonad
 open IdentityOnObjects
 
+
+sblemma : (IM : InvolutiveMonad) → ∀ {X : Obj} → F₁ (I (klInvol IM)) (Monad.η.η (M IM) X ∘ id) ≈ Monad.η.η (M IM) X
+sblemma IM = begin 
+      _ ≈⟨ F-resp-≈ (I (klInvol IM)) identityʳ ⟩ 
+      _ ≈⟨ identity (I (klInvol IM)) ⟩ 
+      _ ∎ 
 
 Contra→Invol : Contramonad {𝓒 = C} → InvolutiveMonad
 Contra→Invol R = record
@@ -101,11 +108,29 @@ _ ≈⟨ F.homomorphism ⟩∘⟨refl ⟩∘⟨refl ⟩∘⟨refl ⟩
   } where open module R = Contramonad R
 
 Invol→Contra : (IM : InvolutiveMonad) → Contramonad {𝓒 = C}
-Invol→Contra IM = record
+Invol→Contra IM = let IOO = I (klInvol IM) 
+                      II = IOO⇒Functor IOO 
+                      module 𝐈 = Functor II in record
   { F = Forgetful (M IM) ∘F II ∘F Functor.op (Free (M IM))
   ; ι = record
     { α = λ { X →  M.μ.η X ∘ 𝐈.F₁ id }
-    ; commute = λ { f → {! !} }
+    ; commute = λ { f → begin 
+      {! !} ≈⟨ refl⟩∘⟨ identityʳ ⟩ 
+      {! !} ≈⟨ (refl⟩∘⟨ Functor.F-resp-≈ M.F (F-resp-≈ IOO identityʳ)) ⟩∘⟨refl ⟩ 
+      {! !} ≈⟨ (refl⟩∘⟨ Functor.F-resp-≈ M.F (identity IOO)) ⟩∘⟨refl ⟩ 
+      {! !} ≈⟨ M.identityˡ ⟩∘⟨refl ⟩ 
+      {! !} ≈⟨ identityˡ ⟩ 
+      {! !} ≈⟨ {!  !} ⟩ 
+      {! !} ≈⟨ {!  !} ⟩ 
+      {! !} ≈⟨ {!  !} ⟩ 
+      {! !} ≈⟨ {!  !} ⟩ 
+      {! !} ≈⟨ {!  !} ⟩ 
+      {! !} ∎ }
+    {-
+(M.μ X ∘ M.F (F₁ (I (klInvol IM)) (M.η.η Y ∘ f))) ∘ M.μ.η Y ∘ _a_294 ∘ F₁ (I (klInvol IM)) id ∘ f
+     -}
+    -- ≈
+    -- (M.μ.η X ∘ M.F.F₁ (F₁ (I (klInvol IM)) (M.η.η Y ∘ f))) ∘ (M.μ.η Y ∘ F₁ (I (klInvol IM)) id) ∘ f
     ; op-commute = λ { f → {! !} }
     }
   ; δ = record
@@ -117,8 +142,7 @@ Invol→Contra IM = record
   ; C2 = λ { {A} {B} {f} → {! !} }
   ; C3 = λ { {A} → {! !} }
   ; C4 = λ { {A} → {! !} }
-  } where II = IOO⇒Functor (I (klInvol IM))
-          module M = Monad (M IM)
-          module 𝐈 = Functor II
+  } where module M = Monad (M IM)
+          --module M∘I = Functor (M.F ∘F 𝐈 {! klInvol IM !})
 
 

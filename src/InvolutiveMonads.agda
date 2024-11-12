@@ -45,12 +45,16 @@ record Involution (C : Category o l e) : Set (o ⊔ l ⊔ e) where
   field
     inv : WeakInverse 𝐈 (Functor.op 𝐈)
 
+  open module inv = WeakInverse inv public
+
 open Involution
 
 record InvolutiveMonad : Set (o ⊔ l ⊔ e) where
   field
     M : Monad C
     klInvol : Involution (Kleisli M)
+
+  open module Inv = Involution klInvol public
 
 
 open InvolutiveMonad
@@ -109,33 +113,39 @@ _ ≈⟨ F.homomorphism ⟩∘⟨refl ⟩∘⟨refl ⟩∘⟨refl ⟩
 
 Invol→Contra : (IM : InvolutiveMonad) → Contramonad {𝓒 = C}
 Invol→Contra IM = let IOO = I (klInvol IM) 
-                      II = IOO⇒Functor IOO 
-                      module 𝐈 = Functor II in record
-  { F = Forgetful (M IM) ∘F II ∘F Functor.op (Free (M IM))
+                      𝐈 = IOO⇒Functor IOO 
+                      module IOO = IdentityOnObjects IOO
+                      module IM = InvolutiveMonad IM
+                      module 𝐈 = Functor 𝐈 in record
+  { F = Forgetful IM.M ∘F 𝐈 ∘F Functor.op (Free IM.M)
   ; ι = record
-    { α = λ { X →  M.μ.η X ∘ 𝐈.F₁ id }
-    ; commute = λ { f → begin 
+    { α = λ { X → M.μ.η X ∘ 𝐈.F₁ (id {M.F.F₀ X}) } -- M.μ.η X ∘ 𝐈.F₁ id }
+    ; commute = λ { {X} {Y} f → begin 
       {! !} ≈⟨ refl⟩∘⟨ identityʳ ⟩ 
-      {! !} ≈⟨ (refl⟩∘⟨ Functor.F-resp-≈ M.F (F-resp-≈ IOO identityʳ)) ⟩∘⟨refl ⟩ 
-      {! !} ≈⟨ (refl⟩∘⟨ Functor.F-resp-≈ M.F (identity IOO)) ⟩∘⟨refl ⟩ 
+      {! !} ≈⟨ (refl⟩∘⟨ M.F.F-resp-≈ (IOO.F-resp-≈ identityʳ)) ⟩∘⟨refl ⟩ 
+      {! !} ≈⟨ (refl⟩∘⟨ M.F.F-resp-≈ IOO.identity) ⟩∘⟨refl ⟩ 
       {! !} ≈⟨ M.identityˡ ⟩∘⟨refl ⟩ 
       {! !} ≈⟨ identityˡ ⟩ 
-      {! !} ≈⟨ {!  !} ⟩ 
-      {! !} ≈⟨ {!  !} ⟩ 
-      {! !} ≈⟨ {!  !} ⟩ 
-      {! !} ≈⟨ {!  !} ⟩ 
-      {! !} ≈⟨ {!  !} ⟩ 
+      {! !} ≈⟨ {! F₁ (I (klInvol IM)) (id {M.F.F₀ X}) !} ⟩ 
       {! !} ∎ }
     {-
-(M.μ X ∘ M.F (F₁ (I (klInvol IM)) (M.η.η Y ∘ f))) ∘ M.μ.η Y ∘ _a_294 ∘ F₁ (I (klInvol IM)) id ∘ f
+μ X ∘ I id 
+≈
+(μ X ∘ M (I (η Y ∘ f))) ∘ (μ Y ∘ I id) ∘ f
      -}
-    -- ≈
-    -- (M.μ.η X ∘ M.F.F₁ (F₁ (I (klInvol IM)) (M.η.η Y ∘ f))) ∘ (M.μ.η Y ∘ F₁ (I (klInvol IM)) id) ∘ f
     ; op-commute = λ { f → {! !} }
     }
   ; δ = record
-    { α = λ { X → M.μ.η (M.F.F₀ X) ∘ M.F.F₁ (𝐈.F₁ id) }
-    ; commute = λ { f → {! !} }
+    { α = λ { X →  M.μ.η (M.F.F₀ X) ∘ M.F.F₁ (𝐈.F₁ id) } -- M.μ.η (M.F.F₀ X) ∘ M.F.F₁ (M.μ.η X ∘ 𝐈.F₁ id) }
+    ; commute = λ { f → begin 
+     {! !} ≈⟨ {! IM.G∘F≈id.⇐.commute (M.η.η _ ∘ f) !} ⟩
+     {! !} ≈˘⟨ MR.elimˡ C M.identityˡ ⟩
+     {! !} ≈˘⟨ (refl⟩∘⟨ M.F.F-resp-≈ 𝐈.identity) ⟩∘⟨refl ⟩
+     {! !} ≈˘⟨ (refl⟩∘⟨ M.F.F-resp-≈ (𝐈.F-resp-≈ (MR.elimʳ C M.identityˡ))) ⟩∘⟨refl ⟩
+     {! !} ≈˘⟨ refl⟩∘⟨ MR.elimʳ C M.identityˡ ⟩
+     {! !} ≈˘⟨ (refl⟩∘⟨ M.F.F-resp-≈ (𝐈.F-resp-≈ (skip-2 (M.F.F-resp-≈ (sblemma IM))))) ⟩∘⟨refl ⟩
+     {! !} ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ ∘-resp-≈ʳ (M.F.F-resp-≈ (sblemma IM)) ⟩
+     {! !} ∎ }
     ; op-commute = λ { f → {! !} }
     }
   ; C1 = λ { {A} {B} {f} → {!  !} }
@@ -143,6 +153,5 @@ Invol→Contra IM = let IOO = I (klInvol IM)
   ; C3 = λ { {A} → {! !} }
   ; C4 = λ { {A} → {! !} }
   } where module M = Monad (M IM)
-          --module M∘I = Functor (M.F ∘F 𝐈 {! klInvol IM !})
 
 

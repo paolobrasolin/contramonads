@@ -24,7 +24,8 @@
                     repo = "agda-categories";
                     owner = "agda";
                     rev = "master";
-                    hash = "sha256-BGmIKethGvWXMuLHkIYe9V1cvDDPsNIQz1/HdpRQvCo=";
+                    hash = "BGmIKethGvWXMuLHkIYe9V1cvDDPsNIQz1/HdpRQvCo=";
+                    #hash = "5kqxtQd2dOE+GDL+WSv9cnYuhBUCML23M8LZPWprvuw=";
                   };
                 }))
               ]))

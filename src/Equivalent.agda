@@ -71,22 +71,27 @@ Theorem⇒ R = let open module R = Contramonad R in record
     { F⇒G = ntHelper (record 
       { η = λ { X → id } 
       ; commute = λ { f → 
-        begin {! !} ≈⟨ identityˡ ⟩
-              {! !} ≈˘⟨ {! !} ⟩ 
-              {! !} ≈˘⟨ {! !} ⟩ 
-              {! !} ≈⟨ homomorphism₃ F ⟩∘⟨refl ⟩ 
-              {! !} ≈˘⟨ sym-assoc ⟩ 
-              {! !} ≈˘⟨ MR.assoc²γδ C ⟩ 
-              {! !} ≈⟨ refl⟩∘⟨ C2 ⟩ 
-              {! !} ≈⟨ sym-assoc ⟩ 
-              {! !} ≈⟨ assoc ⟩∘⟨refl ⟩ 
-              {! !} ≈˘⟨ refl⟩∘⟨ MR.cancelˡ C C6 ⟩
-              {! !} ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ C2 ⟩
-              {! !} ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ (F².F-resp-≈ (MR.elim-center C Equiv.refl) ⟩∘⟨refl) ⟩ -- ugly
-              {! !} ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ (F².F-resp-≈ (MR.center C C6) ⟩∘⟨refl) ⟩ 
-              {! !} ≈⟨ refl⟩∘⟨ refl⟩∘⟨ (F².F-resp-≈ (Equiv.sym F.homomorphism ⟩∘⟨refl) ⟩∘⟨refl) ⟩ 
-              {! !} ≈˘⟨ identityʳ ⟩ 
-              {! !} ∎ }
+        begin _ ≈⟨ identityˡ ⟩
+              _ ≈˘⟨ MR.cancelʳ C C6 ⟩ 
+              _ ≈˘⟨ F.homomorphism ⟩∘⟨refl ⟩ 
+              _ ≈˘⟨ (F.F-resp-≈ (MR.elimˡ C C6)) ⟩∘⟨refl ⟩ 
+              _ ≈⟨ (F.F-resp-≈ (MR.assoc²γδ C)) ⟩∘⟨refl ⟩ 
+              _ ≈⟨ F.F-resp-≈ (refl⟩∘⟨ C1) ⟩∘⟨refl ⟩ 
+              _ ≈˘⟨ F.F-resp-≈ (MR.assoc²αε C) ⟩∘⟨refl ⟩ 
+              _ ≈˘⟨ F.F-resp-≈ (F.homomorphism ⟩∘⟨refl ⟩∘⟨refl) ⟩∘⟨refl ⟩ 
+              _ ≈⟨ homomorphism₃ F ⟩∘⟨refl ⟩ 
+              _ ≈˘⟨ sym-assoc ⟩ 
+              _ ≈˘⟨ MR.assoc²γδ C ⟩ 
+              _ ≈⟨ refl⟩∘⟨ C2 ⟩ 
+              _ ≈⟨ sym-assoc ⟩ 
+              _ ≈⟨ assoc ⟩∘⟨refl ⟩ 
+              _ ≈˘⟨ refl⟩∘⟨ MR.cancelˡ C C6 ⟩
+              _ ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ C2 ⟩
+              _ ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ (F².F-resp-≈ (MR.elim-center C Equiv.refl) ⟩∘⟨refl) ⟩ -- ugly
+              _ ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ (F².F-resp-≈ (MR.center C C6) ⟩∘⟨refl) ⟩ 
+              _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ (F².F-resp-≈ (Equiv.sym F.homomorphism ⟩∘⟨refl) ⟩∘⟨refl) ⟩ 
+              _ ≈˘⟨ identityʳ ⟩ 
+              _ ∎ }
       }) 
 -- (F (ι Y) ∘ F (δ Y) ∘ δ (F Y)) ∘ F (ι (F Y)) ∘ F (F (F f ∘ ι X)) ∘ δ X
     ; F⇐G = ntHelper (record 

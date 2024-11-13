@@ -46,7 +46,7 @@ record Contramonad≡ (R S : Contramonad {𝓒 = C}) : Set _ where
     -- how to cancel. 
 
 
-record InvolutiveMonad≡ (A B : InvolutiveMonad) : Set _ where
+record InvolutiveMonad≡ (A B : InvolutiveMonad {C = C}) : Set _ where
   module 𝐀 = InvolutiveMonad A
   module 𝐁 = InvolutiveMonad B
   module Mᴬ = Monad (𝐀.M)
@@ -122,11 +122,18 @@ Theorem⇐ 𝐀 = record
   { M≡ = record
     { F⇒G = ntHelper (record 
       { η = λ { X → id } 
-      ; commute = λ { f → {! !} }
+      ; commute = λ { f → 
+        begin {! !} ≈⟨ identityˡ ⟩
+              {! !} ≈⟨ {! !} ⟩
+              {! !} ≈˘⟨ identityʳ ⟩
+              {! !} ∎ }
       }) 
     ; F⇐G = ntHelper (record
       { η = λ { X → id } 
-      ; commute = λ { f → {! !} }
+      ; commute = λ { f →
+        begin {! !} ≈⟨ {! !} ⟩
+              {! !} ≈⟨ {! !} ⟩
+              {! !} ∎ }
       }) 
     ; iso = λ { X → record 
       { isoˡ = identity² 
@@ -134,6 +141,6 @@ Theorem⇐ 𝐀 = record
       } }
     } 
   } where module 𝐀 = InvolutiveMonad 𝐀
-          open module C = Category C
           module IOO = IdentityOnObjects 𝐀.Inv.I
+          module M = Monad 𝐀.M
   

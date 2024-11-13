@@ -56,15 +56,6 @@ record InvolutiveMonad≡ (A B : InvolutiveMonad) : Set _ where
 
 
 
-  -- CHEATSHEET
-  -- C1 : (δ B ∘ ι B) ∘ f             ≈ F² f ∘ δ A ∘ ι A
-  -- C2 : F² f ∘ δ A                  ≈ δ B ∘ F (ι B) ∘ F² f ∘ δ A
-  -- C3 : id                          ≈ F (ι A) ∘ F (δ A) ∘ δ (F A) ∘ ι (F A)
-  -- C4 : F (δ A) ∘ δ (F A)           ≈ δ A ∘ F (ι A) ∘ F (δ A) ∘ δ (F A)
-  -- C5 : F (δ A) ∘ F (F² f)          ≈ F (δ A) ∘ F (F² f) ∘ F² (ι B) ∘ F (δ B)
-  -- C6 : F (ι X) ∘ δ X               ≈ id
-  -- C7 : F (δ X) ∘ δ (F X) ∘ ι (F X) ≈ δ X
-  -- C8 : F (δ X)                     ≈ F (δ (F X) ∘ ι (F X)) ∘ F² (δ X)
 Theorem⇒ : (R : Contramonad {𝓒 = C}) → Contramonad≡ R (Invol→Contra (Contra→Invol R))
 Theorem⇒ R = let open module R = Contramonad R in record 
   { F≡ = record 
@@ -93,14 +84,35 @@ Theorem⇒ R = let open module R = Contramonad R in record
               _ ≈˘⟨ identityʳ ⟩ 
               _ ∎ }
       }) 
--- (F (ι Y) ∘ F (δ Y) ∘ δ (F Y)) ∘ F (ι (F Y)) ∘ F (F (F f ∘ ι X)) ∘ δ X
+  -- CHEATSHEET
+  -- C1 : (δ B ∘ ι B) ∘ f             ≈ F² f ∘ δ A ∘ ι A
+  -- C2 : F² f ∘ δ A                  ≈ δ B ∘ F (ι B) ∘ F² f ∘ δ A
+  -- C3 : id                          ≈ F (ι A) ∘ F (δ A) ∘ δ (F A) ∘ ι (F A)
+  -- C4 : F (δ A) ∘ δ (F A)           ≈ δ A ∘ F (ι A) ∘ F (δ A) ∘ δ (F A)
+  -- C5 : F (δ A) ∘ F (F² f)          ≈ F (δ A) ∘ F (F² f) ∘ F² (ι B) ∘ F (δ B)
+  -- C6 : F (ι X) ∘ δ X               ≈ id
+  -- C7 : F (δ X) ∘ δ (F X) ∘ ι (F X) ≈ δ X
+  -- C8 : F (δ X)                     ≈ F (δ (F X) ∘ ι (F X)) ∘ F² (δ X)
     ; F⇐G = ntHelper (record 
       { η = λ { X → id } 
       ; commute = λ { f → 
-        begin {! !} ≈⟨ {! !} ⟩
-              {!!} ≈⟨ {! !} ⟩ 
-              {! !} ∎ }
+        begin _ ≈⟨ identityˡ ⟩
+              _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ F².F-resp-≈ (F.homomorphism ⟩∘⟨refl) ⟩∘⟨refl ⟩ 
+              _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ F².F-resp-≈ (MR.assoc²γδ C) ⟩∘⟨refl ⟩ 
+              _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ F².F-resp-≈ (MR.elim-center C C6) ⟩∘⟨refl ⟩ 
+              _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ C2 ⟩ 
+              _ ≈⟨ refl⟩∘⟨ MR.cancelˡ C C6 ⟩ 
+              _ ≈⟨ sym-assoc ⟩∘⟨refl ⟩ 
+              _ ≈⟨ assoc ⟩ 
+              _ ≈˘⟨ refl⟩∘⟨ C2 ⟩ 
+              _ ≈⟨  {! !} ⟩ 
+              _ ≈˘⟨ identityʳ ⟩ 
+              _ ∎ }
       }) 
+        --begin {! !} ≈⟨ {! !} ⟩
+              --{!!} ≈⟨ {! !} ⟩ 
+              --{! !} ∎ }
+      --}) 
     ; iso = λ { X → record 
       { isoˡ = identity² 
       ; isoʳ = identity² 

@@ -124,17 +124,19 @@ Theorem⇐ 𝐀 = record
       { η = λ { X → id } 
       ; commute = λ { f → 
         begin {! !} ≈⟨ identityˡ ⟩
-              {! !} ≈⟨ {! !} ⟩
+              {! !} ≈⟨ {! !} ⟩ --1 
               {! !} ≈˘⟨ identityʳ ⟩
               {! !} ∎ }
       }) 
     ; F⇐G = ntHelper (record
       { η = λ { X → id } 
       ; commute = λ { f →
-        begin {! !} ≈⟨ {! !} ⟩
-              {! !} ≈⟨ {! !} ⟩
+        begin {! !} ≈⟨ identityˡ ⟩
+              {! !} ≈⟨ {! !} ⟩ --2
+              {! !} ≈˘⟨ identityʳ ⟩
               {! !} ∎ }
       }) 
+    -- these two are _exactly_ the same goals up to Equiv.sym.
     ; iso = λ { X → record 
       { isoˡ = identity² 
       ; isoʳ = identity² 

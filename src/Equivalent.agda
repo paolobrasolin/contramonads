@@ -72,7 +72,14 @@ Theorem⇒ R = let open module R = Contramonad R in record
       { η = λ { X → id } 
       ; commute = λ { f → 
         begin {! !} ≈⟨ identityˡ ⟩
-              {! !} ≈⟨ {! !} ⟩ 
+              {! !} ≈˘⟨ {! !} ⟩ 
+              {! !} ≈˘⟨ {! !} ⟩ 
+              {! !} ≈⟨ homomorphism₃ F ⟩∘⟨refl ⟩ 
+              {! !} ≈˘⟨ sym-assoc ⟩ 
+              {! !} ≈˘⟨ MR.assoc²γδ C ⟩ 
+              {! !} ≈⟨ refl⟩∘⟨ C2 ⟩ 
+              {! !} ≈⟨ sym-assoc ⟩ 
+              {! !} ≈⟨ assoc ⟩∘⟨refl ⟩ 
               {! !} ≈˘⟨ refl⟩∘⟨ MR.cancelˡ C C6 ⟩
               {! !} ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ C2 ⟩
               {! !} ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ (F².F-resp-≈ (MR.elim-center C Equiv.refl) ⟩∘⟨refl) ⟩ -- ugly
@@ -97,7 +104,7 @@ Theorem⇒ R = let open module R = Contramonad R in record
   } 
 
 
-Theorem⇐ : (𝐀 : InvolutiveMonad) → InvolutiveMonad≡ 𝐀 (Contra→Invol (Invol→Contra 𝐀))
+Theorem⇐ : (𝐀 : InvolutiveMonad {C = C}) → InvolutiveMonad≡ 𝐀 (Contra→Invol (Invol→Contra 𝐀))
 Theorem⇐ 𝐀 = record 
   { M≡ = record
     { F⇒G = ntHelper (record 

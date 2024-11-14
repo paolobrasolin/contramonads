@@ -7,6 +7,7 @@ open import Categories.Category.Core
 open import Categories.Functor.IdentityOnObjects
 open import Agda.Builtin.Sigma
 open import Categories.Category.Unbundled renaming (Category to UCategory)
+open import Categories.Morphism using (Iso)
 
 module InvolutiveMonads {o l e} {C : Category o l e} where
 
@@ -132,13 +133,16 @@ Invol→Contra IM = let IOO = I (klInvol IM)
 μ X ∘ I id 
 ≈
 (μ X ∘ M (I (η Y ∘ f))) ∘ (μ Y ∘ I id) ∘ f
+-- dis : (M.μ.η Y ∘ M.F.F₁ (𝐀.F∘G≈id.⇒.η Y)) ∘ 𝐀.F∘G≈id.⇐.η Y ≈ M.η.η Y
+-- dat : (M.μ.η Y ∘ M.F.F₁ (𝐀.F∘G≈id.⇐.η Y)) ∘ 𝐀.F∘G≈id.⇒.η Y ≈ M.η.η Y
      -}
     ; op-commute = λ { f → {! !} }
     }
   ; δ = record
     { α = λ { X →  M.μ.η (M.F.F₀ X) ∘ M.F.F₁ (𝐈.F₁ id) } -- M.μ.η (M.F.F₀ X) ∘ M.F.F₁ (M.μ.η X ∘ 𝐈.F₁ id) }
-    ; commute = λ { f → begin 
-     {! !} ≈⟨ {! IM.G∘F≈id.⇐.commute (M.η.η _ ∘ f) !} ⟩
+    ; commute = λ { {X} {Y} f → begin 
+     {! !} ≈⟨ refl⟩∘⟨ {! IM.F∘G≈id.⇐.η X  !} ⟩
+     {! !} ≈⟨ {! IM.inv.F∘G≈id.iso.isoʳ  !} ⟩
      {! !} ≈˘⟨ MR.elimˡ C M.identityˡ ⟩
      {! !} ≈˘⟨ (refl⟩∘⟨ M.F.F-resp-≈ 𝐈.identity) ⟩∘⟨refl ⟩
      {! !} ≈˘⟨ (refl⟩∘⟨ M.F.F-resp-≈ (𝐈.F-resp-≈ (MR.elimʳ C M.identityˡ))) ⟩∘⟨refl ⟩
@@ -153,5 +157,5 @@ Invol→Contra IM = let IOO = I (klInvol IM)
   ; C3 = λ { {A} → {! !} }
   ; C4 = λ { {A} → {! !} }
   } where module M = Monad (M IM)
-
+          module 𝕚 X = Iso (F∘G≈id.iso IM X)
 

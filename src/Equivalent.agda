@@ -1,6 +1,7 @@
 {-# OPTIONS --without-K --allow-unsolved-metas #-}
 
 open import Categories.Category
+open import Categories.Morphism using (Iso)
 open import Categories.Functor renaming (id to idF)
 open import Categories.Functor.Properties
 open import Categories.Category.Core
@@ -117,14 +118,17 @@ Theorem⇒ R = let open module R = Contramonad R in record
   } 
 
 
+-- dis : (M.μ.η Y ∘ M.F.F₁ (𝐀.F∘G≈id.⇒.η Y)) ∘ 𝐀.F∘G≈id.⇐.η Y ≈ M.η.η Y
+-- dat : (M.μ.η Y ∘ M.F.F₁ (𝐀.F∘G≈id.⇐.η Y)) ∘ 𝐀.F∘G≈id.⇒.η Y ≈ M.η.η Y
 Theorem⇐ : (𝐀 : InvolutiveMonad {C = C}) → InvolutiveMonad≡ 𝐀 (Contra→Invol (Invol→Contra 𝐀))
 Theorem⇐ 𝐀 = record 
   { M≡ = record
     { F⇒G = ntHelper (record 
       { η = λ { X → id } 
-      ; commute = λ { f → 
+      ; commute = λ { {X} {Y} f → 
         begin _ ≈⟨ identityˡ ⟩
-              {! !} ≈⟨ {! !} ⟩ --1 
+              {! !} ≈⟨ {! 𝐀.inv.F∘G≈id.iso.isoʳ Y !} ⟩ --1 
+              {! !} ≈⟨ {! 𝐀.inv.F∘G≈id.iso.isoˡ Y !} ⟩ --1 
               _ ≈˘⟨ identityʳ ⟩
               _ ∎ }
       }) 
@@ -136,7 +140,7 @@ Theorem⇐ 𝐀 = record
               _ ≈˘⟨ identityʳ ⟩
               _ ∎ }
       }) 
-    -- these two are _exactly_ the same goals up to Equiv.sym.
+    -- 1 and 2 are _exactly_ the same goals up to Equiv.sym.
     ; iso = λ { X → record 
       { isoˡ = identity² 
       ; isoʳ = identity² 
@@ -145,4 +149,4 @@ Theorem⇐ 𝐀 = record
   } where module 𝐀 = InvolutiveMonad 𝐀
           module IOO = IdentityOnObjects 𝐀.Inv.I
           module M = Monad 𝐀.M
-  
+          module 𝕚 X = Iso (𝐀.F∘G≈id.iso X)

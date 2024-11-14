@@ -123,18 +123,18 @@ Theorem⇐ 𝐀 = record
     { F⇒G = ntHelper (record 
       { η = λ { X → id } 
       ; commute = λ { f → 
-        begin {! !} ≈⟨ identityˡ ⟩
+        begin _ ≈⟨ identityˡ ⟩
               {! !} ≈⟨ {! !} ⟩ --1 
-              {! !} ≈˘⟨ identityʳ ⟩
-              {! !} ∎ }
+              _ ≈˘⟨ identityʳ ⟩
+              _ ∎ }
       }) 
     ; F⇐G = ntHelper (record
       { η = λ { X → id } 
       ; commute = λ { f →
-        begin {! !} ≈⟨ identityˡ ⟩
+        begin _ ≈⟨ identityˡ ⟩
               {! !} ≈⟨ {! !} ⟩ --2
-              {! !} ≈˘⟨ identityʳ ⟩
-              {! !} ∎ }
+              _ ≈˘⟨ identityʳ ⟩
+              _ ∎ }
       }) 
     -- these two are _exactly_ the same goals up to Equiv.sym.
     ; iso = λ { X → record 

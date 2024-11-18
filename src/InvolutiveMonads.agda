@@ -1,5 +1,7 @@
 {-# OPTIONS --without-K --allow-unsolved-metas #-}
 
+-- see p.8 for statement and p.14 for proof
+
 open import Categories.Category
 open import Categories.Functor renaming (id to idF)
 open import Categories.Functor.Properties

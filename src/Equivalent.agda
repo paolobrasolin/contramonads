@@ -36,15 +36,15 @@ open import Categories.Category.Unbundled.Properties using (pack′;unpack′)
 
 
 record Contramonad≡ (R S : Contramonad {𝓒 = C}) : Set _ where
-  module R = Contramonad R 
+  module R = Contramonad R
   module S = Contramonad S
   field
     F≡ : NaturalIsomorphism R.F S.F
     -- It would be formally correct to have also the fields
     --   ι≡ : ∀ {X} → (R.ι.α X) ≈ S.ι.α X
-    --   δ≡ : ∀ {X} → (R.δ.α X) ≈ S.δ.α X 
-    -- but they would introduce coherences that we would not know 
-    -- how to cancel. 
+    --   δ≡ : ∀ {X} → (R.δ.α X) ≈ S.δ.α X
+    -- but they would introduce coherences that we would not know
+    -- how to cancel.
 
 
 record InvolutiveMonad≡ (A B : InvolutiveMonad {C = C}) : Set _ where
@@ -58,94 +58,94 @@ record InvolutiveMonad≡ (A B : InvolutiveMonad {C = C}) : Set _ where
 
 
 Theorem⇒ : (R : Contramonad {𝓒 = C}) → Contramonad≡ R (Invol→Contra (Contra→Invol R))
-Theorem⇒ R = let open module R = Contramonad R in record 
-  { F≡ = record 
-    { F⇒G = ntHelper (record 
-      { η = λ { X → id } 
-      ; commute = λ { f → 
+Theorem⇒ R = let open module R = Contramonad R in record
+  { F≡ = record
+    { F⇒G = ntHelper (record
+      { η = λ { X → id }
+      ; commute = λ { f →
         begin _ ≈⟨ identityˡ ⟩
-              _ ≈˘⟨ MR.cancelʳ C C6 ⟩ 
-              _ ≈˘⟨ F.homomorphism ⟩∘⟨refl ⟩ 
-              _ ≈˘⟨ (F.F-resp-≈ (MR.elimˡ C C6)) ⟩∘⟨refl ⟩ 
-              _ ≈⟨ (F.F-resp-≈ (MR.assoc²γδ C)) ⟩∘⟨refl ⟩ 
-              _ ≈⟨ F.F-resp-≈ (refl⟩∘⟨ C1) ⟩∘⟨refl ⟩ 
-              _ ≈˘⟨ F.F-resp-≈ (MR.assoc²αε C) ⟩∘⟨refl ⟩ 
-              _ ≈˘⟨ F.F-resp-≈ (F.homomorphism ⟩∘⟨refl ⟩∘⟨refl) ⟩∘⟨refl ⟩ 
-              _ ≈⟨ homomorphism₃ F ⟩∘⟨refl ⟩ 
-              _ ≈˘⟨ sym-assoc ⟩ 
-              _ ≈˘⟨ MR.assoc²γδ C ⟩ 
-              _ ≈⟨ refl⟩∘⟨ C2 ⟩ 
-              _ ≈⟨ sym-assoc ⟩ 
-              _ ≈⟨ assoc ⟩∘⟨refl ⟩ 
+              _ ≈˘⟨ MR.cancelʳ C C6 ⟩
+              _ ≈˘⟨ F.homomorphism ⟩∘⟨refl ⟩
+              _ ≈˘⟨ (F.F-resp-≈ (MR.elimˡ C C6)) ⟩∘⟨refl ⟩
+              _ ≈⟨ (F.F-resp-≈ (MR.assoc²γδ C)) ⟩∘⟨refl ⟩
+              _ ≈⟨ F.F-resp-≈ (refl⟩∘⟨ C1) ⟩∘⟨refl ⟩
+              _ ≈˘⟨ F.F-resp-≈ (MR.assoc²αε C) ⟩∘⟨refl ⟩
+              _ ≈˘⟨ F.F-resp-≈ (F.homomorphism ⟩∘⟨refl ⟩∘⟨refl) ⟩∘⟨refl ⟩
+              _ ≈⟨ homomorphism₃ F ⟩∘⟨refl ⟩
+              _ ≈˘⟨ sym-assoc ⟩
+              _ ≈˘⟨ MR.assoc²γδ C ⟩
+              _ ≈⟨ refl⟩∘⟨ C2 ⟩
+              _ ≈⟨ sym-assoc ⟩
+              _ ≈⟨ assoc ⟩∘⟨refl ⟩
               _ ≈˘⟨ refl⟩∘⟨ MR.cancelˡ C C6 ⟩
               _ ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ C2 ⟩
               _ ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ (F².F-resp-≈ (MR.elim-center C Equiv.refl) ⟩∘⟨refl) ⟩ -- ugly
-              _ ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ (F².F-resp-≈ (MR.center C C6) ⟩∘⟨refl) ⟩ 
-              _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ (F².F-resp-≈ (Equiv.sym F.homomorphism ⟩∘⟨refl) ⟩∘⟨refl) ⟩ 
-              _ ≈˘⟨ identityʳ ⟩ 
+              _ ≈˘⟨ refl⟩∘⟨ refl⟩∘⟨ (F².F-resp-≈ (MR.center C C6) ⟩∘⟨refl) ⟩
+              _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ (F².F-resp-≈ (Equiv.sym F.homomorphism ⟩∘⟨refl) ⟩∘⟨refl) ⟩
+              _ ≈˘⟨ identityʳ ⟩
               _ ∎ }
-      }) 
-    ; F⇐G = ntHelper (record 
-      { η = λ { X → id } 
-      ; commute = λ { f → 
+      })
+    ; F⇐G = ntHelper (record
+      { η = λ { X → id }
+      ; commute = λ { f →
         begin _ ≈⟨ identityˡ ⟩
-              _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ F².F-resp-≈ (F.homomorphism ⟩∘⟨refl) ⟩∘⟨refl ⟩ 
-              _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ F².F-resp-≈ (MR.assoc²γδ C) ⟩∘⟨refl ⟩ 
-              _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ F².F-resp-≈ (MR.elim-center C C6) ⟩∘⟨refl ⟩ 
-              _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ C2 ⟩ 
-              _ ≈⟨ refl⟩∘⟨ MR.cancelˡ C C6 ⟩ 
-              _ ≈⟨ sym-assoc ⟩∘⟨refl ⟩ 
-              _ ≈⟨ assoc ⟩ 
-              _ ≈˘⟨ refl⟩∘⟨ C2 ⟩ 
-              _ ≈˘⟨ F.homomorphism ⟩∘⟨refl ⟩ 
-              _ ≈˘⟨ assoc ⟩ 
-              _ ≈˘⟨ F.homomorphism ⟩∘⟨refl ⟩ 
-              _ ≈⟨ F.F-resp-≈ (F.homomorphism ⟩∘⟨refl) ⟩∘⟨refl ⟩ 
-              _ ≈⟨ F.F-resp-≈ assoc ⟩∘⟨refl ⟩ 
-              _ ≈˘⟨ F.F-resp-≈ (refl⟩∘⟨ C1) ⟩∘⟨refl ⟩ 
-              _ ≈⟨ F.F-resp-≈ (MR.assoc²δγ C) ⟩∘⟨refl ⟩ 
-              _ ≈⟨ F.F-resp-≈ (MR.elimˡ C C6) ⟩∘⟨refl ⟩ 
-              _ ≈⟨ ∘-resp-≈ˡ F.homomorphism  ⟩ 
-              _ ≈⟨  MR.cancelʳ C C6  ⟩ 
-              _ ≈˘⟨ identityʳ ⟩ 
+              _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ F².F-resp-≈ (F.homomorphism ⟩∘⟨refl) ⟩∘⟨refl ⟩
+              _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ F².F-resp-≈ (MR.assoc²γδ C) ⟩∘⟨refl ⟩
+              _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ F².F-resp-≈ (MR.elim-center C C6) ⟩∘⟨refl ⟩
+              _ ≈⟨ refl⟩∘⟨ refl⟩∘⟨ C2 ⟩
+              _ ≈⟨ refl⟩∘⟨ MR.cancelˡ C C6 ⟩
+              _ ≈⟨ sym-assoc ⟩∘⟨refl ⟩
+              _ ≈⟨ assoc ⟩
+              _ ≈˘⟨ refl⟩∘⟨ C2 ⟩
+              _ ≈˘⟨ F.homomorphism ⟩∘⟨refl ⟩
+              _ ≈˘⟨ assoc ⟩
+              _ ≈˘⟨ F.homomorphism ⟩∘⟨refl ⟩
+              _ ≈⟨ F.F-resp-≈ (F.homomorphism ⟩∘⟨refl) ⟩∘⟨refl ⟩
+              _ ≈⟨ F.F-resp-≈ assoc ⟩∘⟨refl ⟩
+              _ ≈˘⟨ F.F-resp-≈ (refl⟩∘⟨ C1) ⟩∘⟨refl ⟩
+              _ ≈⟨ F.F-resp-≈ (MR.assoc²δγ C) ⟩∘⟨refl ⟩
+              _ ≈⟨ F.F-resp-≈ (MR.elimˡ C C6) ⟩∘⟨refl ⟩
+              _ ≈⟨ ∘-resp-≈ˡ F.homomorphism  ⟩
+              _ ≈⟨  MR.cancelʳ C C6  ⟩
+              _ ≈˘⟨ identityʳ ⟩
               _ ∎ }
-      }) 
-    ; iso = λ { X → record 
-      { isoˡ = identity² 
-      ; isoʳ = identity² 
+      })
+    ; iso = λ { X → record
+      { isoˡ = identity²
+      ; isoʳ = identity²
       } }
-    } 
-  } 
+    }
+  }
 
 
 -- dis : (M.μ.η Y ∘ M.F.F₁ (𝐀.F∘G≈id.⇒.η Y)) ∘ 𝐀.F∘G≈id.⇐.η Y ≈ M.η.η Y
 -- dat : (M.μ.η Y ∘ M.F.F₁ (𝐀.F∘G≈id.⇐.η Y)) ∘ 𝐀.F∘G≈id.⇒.η Y ≈ M.η.η Y
 Theorem⇐ : (𝐀 : InvolutiveMonad {C = C}) → InvolutiveMonad≡ 𝐀 (Contra→Invol (Invol→Contra 𝐀))
-Theorem⇐ 𝐀 = record 
+Theorem⇐ 𝐀 = record
   { M≡ = record
-    { F⇒G = ntHelper (record 
-      { η = λ { X → id } 
-      ; commute = λ { {X} {Y} f → 
+    { F⇒G = ntHelper (record
+      { η = λ { X → id }
+      ; commute = λ { {X} {Y} f →
         begin _ ≈⟨ identityˡ ⟩
-              {! !} ≈⟨ {! 𝐀.inv.F∘G≈id.iso.isoʳ Y !} ⟩ --1 
-              {! !} ≈⟨ {! 𝐀.inv.F∘G≈id.iso.isoˡ Y !} ⟩ --1 
+              {! !} ≈⟨ {! 𝐀.inv.F∘G≈id.iso.isoʳ Y !} ⟩ --1
+              {! !} ≈⟨ {! 𝐀.inv.F∘G≈id.iso.isoˡ Y !} ⟩ --1
               _ ≈˘⟨ identityʳ ⟩
               _ ∎ }
-      }) 
+      })
     ; F⇐G = ntHelper (record
-      { η = λ { X → id } 
+      { η = λ { X → id }
       ; commute = λ { f →
         begin _ ≈⟨ identityˡ ⟩
               {! !} ≈⟨ {! !} ⟩ --2
               _ ≈˘⟨ identityʳ ⟩
               _ ∎ }
-      }) 
+      })
     -- 1 and 2 are _exactly_ the same goals up to Equiv.sym.
-    ; iso = λ { X → record 
-      { isoˡ = identity² 
-      ; isoʳ = identity² 
+    ; iso = λ { X → record
+      { isoˡ = identity²
+      ; isoʳ = identity²
       } }
-    } 
+    }
   } where module 𝐀 = InvolutiveMonad 𝐀
           module IOO = IdentityOnObjects 𝐀.Inv.I
           module M = Monad 𝐀.M

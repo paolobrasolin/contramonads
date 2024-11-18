@@ -63,10 +63,10 @@ open IdentityOnObjects
 
 
 sblemma : (IM : InvolutiveMonad) → ∀ {X : Obj} → F₁ (I (klInvol IM)) (Monad.η.η (M IM) X ∘ id) ≈ Monad.η.η (M IM) X
-sblemma IM = begin 
-      _ ≈⟨ F-resp-≈ (I (klInvol IM)) identityʳ ⟩ 
-      _ ≈⟨ identity (I (klInvol IM)) ⟩ 
-      _ ∎ 
+sblemma IM = begin
+      _ ≈⟨ F-resp-≈ (I (klInvol IM)) identityʳ ⟩
+      _ ≈⟨ identity (I (klInvol IM)) ⟩
+      _ ∎
 
 Contra→Invol : Contramonad {𝓒 = C} → InvolutiveMonad
 Contra→Invol R = record
@@ -113,39 +113,39 @@ _ ≈⟨ F.homomorphism ⟩∘⟨refl ⟩∘⟨refl ⟩∘⟨refl ⟩
   } where open module R = Contramonad R
 
 
-module _ {T : Monad C} where 
+module _ {T : Monad C} where
   module T = Monad T
   lemma-lemmino : ∀ {X Y} {f : X ⇒ T.F.F₀ Y} → T.μ.η Y ∘ T.F.F₁ (T.μ.η Y ∘ T.F.F₁ f) ≈ T.μ.η Y ∘ T.F.F₁ f ∘ T.μ.η X
-  lemma-lemmino {X} {Y} {f} = begin 
-      _ ≈˘⟨ MR.pullʳ C (Equiv.sym T.F.homomorphism) ⟩ 
-      _ ≈⟨ T.assoc ⟩∘⟨refl ⟩ 
-      _ ≈⟨ assoc ⟩ 
-      _ ≈⟨ refl⟩∘⟨ T.μ.commute f ⟩ 
-      _ ∎ 
+  lemma-lemmino {X} {Y} {f} = begin
+      _ ≈˘⟨ MR.pullʳ C (Equiv.sym T.F.homomorphism) ⟩
+      _ ≈⟨ T.assoc ⟩∘⟨refl ⟩
+      _ ≈⟨ assoc ⟩
+      _ ≈⟨ refl⟩∘⟨ T.μ.commute f ⟩
+      _ ∎
 
 Invol→Contra : (IM : InvolutiveMonad) → Contramonad {𝓒 = C}
-Invol→Contra IM = let IOO = I (klInvol IM) 
-                      𝐈 = IOO⇒Functor IOO 
+Invol→Contra IM = let IOO = I (klInvol IM)
+                      𝐈 = IOO⇒Functor IOO
                       module IOO = IdentityOnObjects IOO
                       module IM = InvolutiveMonad IM
                       module 𝐈 = Functor 𝐈 in record
   { F = Forgetful IM.M ∘F 𝐈 ∘F Functor.op (Free IM.M)
   ; ι = record
     { α = λ { X → M.μ.η X ∘ 𝐈.F₁ (M.F.F₁ (M.η.η X)) ∘ M.η.η X
-    -- M.μ.η X ∘ 𝐈.F₁ (id {M.F.F₀ X}) } 
-    -- M.μ.η X ∘ 𝐈.F₁ id 
+    -- M.μ.η X ∘ 𝐈.F₁ (id {M.F.F₀ X}) }
+    -- M.μ.η X ∘ 𝐈.F₁ id
     }
-    ; commute = λ { {X} {Y} f → begin 
-      {! !} ≈⟨ refl⟩∘⟨ identityʳ ⟩ 
-      {! !} ≈⟨ (refl⟩∘⟨ M.F.F-resp-≈ (IOO.F-resp-≈ identityʳ)) ⟩∘⟨refl ⟩ 
-      {! !} ≈⟨ (refl⟩∘⟨ M.F.F-resp-≈ IOO.identity) ⟩∘⟨refl ⟩ 
-      {! !} ≈⟨ M.identityˡ ⟩∘⟨refl ⟩ 
-      {! !} ≈⟨ identityˡ ⟩ 
-      --{! !} ≈⟨ {! lemma-lemmino !} ⟩∘⟨refl ⟩ 
-      {! !} ≈⟨ {! !}  ⟩ 
+    ; commute = λ { {X} {Y} f → begin
+      {! !} ≈⟨ refl⟩∘⟨ identityʳ ⟩
+      {! !} ≈⟨ (refl⟩∘⟨ M.F.F-resp-≈ (IOO.F-resp-≈ identityʳ)) ⟩∘⟨refl ⟩
+      {! !} ≈⟨ (refl⟩∘⟨ M.F.F-resp-≈ IOO.identity) ⟩∘⟨refl ⟩
+      {! !} ≈⟨ M.identityˡ ⟩∘⟨refl ⟩
+      {! !} ≈⟨ identityˡ ⟩
+      --{! !} ≈⟨ {! lemma-lemmino !} ⟩∘⟨refl ⟩
+      {! !} ≈⟨ {! !}  ⟩
       {! !} ∎ }
     {-
-μ X ∘ I id 
+μ X ∘ I id
 ≈
 (μ X ∘ M (I (η Y ∘ f))) ∘ (μ Y ∘ I id) ∘ f
 -- dis : (M.μ.η Y ∘ M.F.F₁ (IM.F∘G≈id.⇒.η Y)) ∘ IM.F∘G≈id.⇐.η Y ≈ M.η.η Y
@@ -155,11 +155,11 @@ Invol→Contra IM = let IOO = I (klInvol IM)
     }
   ; δ = record
     { α = λ { X → 𝐈.F₁ (M.F.F₁ (M.η.η X))
-    -- M.F.F₁ (M.μ.η X ∘ 𝐈.F₁ (id {M.F.F₀ X})) } 
+    -- M.F.F₁ (M.μ.η X ∘ 𝐈.F₁ (id {M.F.F₀ X})) }
     -- M.μ.η (M.F.F₀ X) ∘ M.F.F₁ ({! !} ∘ 𝐈.F₁ id) }
-    --  M.F.F₁ (M.μ.η X ∘ 𝐈.F₁ id) 
+    --  M.F.F₁ (M.μ.η X ∘ 𝐈.F₁ id)
     }
-    ; commute = λ { {X} {Y} f → begin 
+    ; commute = λ { {X} {Y} f → begin
      {! !} ≈⟨ {!   !} ⟩
      --{! !} ≈⟨ {! !} ⟩ -- {! 𝐈.homomorphism {g = M.η.η Y ∘ f}  !} ⟩
      {! !} ≈˘⟨ MR.elimˡ C M.identityˡ ⟩

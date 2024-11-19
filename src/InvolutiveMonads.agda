@@ -59,10 +59,8 @@ record InvolutiveMonad : Set (o ⊔ l ⊔ e) where
 
   open module Inv = Involution klInvol public
 
-
 open InvolutiveMonad
 open IdentityOnObjects
-
 
 sblemma : (IM : InvolutiveMonad) → ∀ {X : Obj} → F₁ (I (klInvol IM)) (Monad.η.η (M IM) X ∘ id) ≈ Monad.η.η (M IM) X
 sblemma IM = begin
@@ -108,8 +106,54 @@ _ ≈⟨ F.homomorphism ⟩∘⟨refl ⟩∘⟨refl ⟩∘⟨refl ⟩
       ; F-resp-≈ = λ { x → F.F-resp-≈ x ⟩∘⟨refl }
       }
     ; inv = record
-      { F∘G≈id = {! !}
-      ; G∘F≈id = {! !}
+        -- CHEATSHEET
+        -- C1 : (δ B ∘ ι B) ∘ f             ≈ F² f ∘ δ A ∘ ι A
+        -- C2 : F² f ∘ δ A                  ≈ δ B ∘ F (ι B) ∘ F² f ∘ δ A
+        -- C3 : id                          ≈ F (ι A) ∘ F (δ A) ∘ δ (F A) ∘ ι (F A)
+        -- C4 : F (δ A) ∘ δ (F A)           ≈ δ A ∘ F (ι A) ∘ F (δ A) ∘ δ (F A)
+        -- C5 : F (δ A) ∘ F (F² f)          ≈ F (δ A) ∘ F (F² f) ∘ F² (ι B) ∘ F (δ B)
+        -- C6 : F (ι X) ∘ δ X               ≈ id
+        -- C7 : F (δ X) ∘ δ (F X) ∘ ι (F X) ≈ δ X
+        -- C8 : F (δ X)                     ≈ F (δ (F X) ∘ ι (F X)) ∘ F² (δ X)
+      { F∘G≈id = niHelper (record 
+        { η = ι.α
+        ; η⁻¹ = ι.α
+        ; commute = λ { f → begin
+            _ ≈⟨ {! !} ⟩ 
+            _ ≈⟨ {! !} ⟩ 
+            _ ∎ }
+          -- ((F (ι Y) ∘ F (δ Y) ∘ δ (F Y)) ∘ F (ι (F Y)) ∘ F (F (ι Y)) ∘ δ Y) ∘ F (F f ∘ δ Y ∘ ι Y) ∘ δ X ∘ ι X
+          -- ≈
+          -- ((F (ι Y) ∘ F (δ Y) ∘ δ (F Y)) ∘ F (ι (F Y)) ∘ F (F f) ∘ δ X) ∘ ι X
+        ; iso = λ { X → record 
+          { isoˡ = begin
+            _ ≈⟨ {! !} ⟩ 
+            _ ≈⟨ {! !} ⟩ 
+            _ ∎
+          --((F (ι X) ∘ F (δ X) ∘ δ (F X)) ∘ F (ι (F X)) ∘ F (F (ι X)) ∘ δ X) ∘ ι X 
+          --≈ 
+          --ι X
+          ; isoʳ = begin
+            _ ≈⟨ {! !} ⟩ 
+            _ ≈⟨ {! !} ⟩ 
+            _ ∎ }
+          --((F (ι X) ∘ F (δ X) ∘ δ (F X)) ∘ F (ι (F X)) ∘ F (F (ι X)) ∘ δ X) ∘ ι X
+          --≈ 
+          --ι X
+          }
+        })
+      ; G∘F≈id = niHelper (record 
+        { η = ι.α
+        ; η⁻¹ = ι.α
+        ; commute = λ { f → {! !} }
+          --((F (ι X) ∘ F (δ (F X)) ∘ F (ι (F X)) ∘ F (F (F (F f ∘ δ X ∘ ι X) ∘ δ Y ∘ ι Y)) ∘ δ Y) ∘ ι Y
+          --≈
+          --((F (ι X) ∘ F (δ X) ∘ δ (F X)) ∘ F (ι (F X)) ∘ F (F (ι X)) ∘ δ X) ∘ f
+        ; iso = λ { X → record 
+          { isoˡ = {! !} 
+          ; isoʳ = {! !} } 
+          }
+        })
       }
     }
   } where open module R = Contramonad R

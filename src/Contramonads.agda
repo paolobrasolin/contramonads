@@ -92,6 +92,10 @@ record Contramonad : Set (o ⊔ l ⊔ e) where
   μ̂ : ∀ {X : Obj} → F².F₀ X ⇒ F.F₀ X
   μ̂ {X} = F.F₁ (ι.α X) ∘ F.F₁ (δ.α X) ∘ δ.α (F.F₀ X)
 
+  C1' : ∀ {A B : Obj} {f : A ⇒ B} →
+    δ.α B ∘ ι.α B ∘ f ≈ (F².F₁ f ∘ δ.α A) ∘ ι.α A
+  C1' = sym-assoc ∙ C1 ∙ sym-assoc
+
   C5 : ∀ {A B : Obj} (f : A ⇒ B) →
     F.F₁ (δ.α A) ∘ F.F₁ (F².F₁ f) ≈ F.F₁ (δ.α A) ∘ F.F₁ (F².F₁ f) ∘ F².F₁ (ι.α B) ∘ F.F₁ (δ.α B)
   C5 f =

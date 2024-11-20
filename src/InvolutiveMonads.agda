@@ -118,11 +118,24 @@ _ ≈⟨ F.homomorphism ⟩∘⟨refl ⟩∘⟨refl ⟩∘⟨refl ⟩
       { F∘G≈id = niHelper (record 
         { η = ι.α
         ; η⁻¹ = ι.α
-        ; commute = λ { f → begin
+        ; commute = λ { {X} {Y} f → begin
+            _ ≈⟨ refl⟩∘⟨ F.homomorphism ⟩∘⟨refl ⟩ 
+            _ ≈⟨ refl⟩∘⟨ (F.homomorphism ⟩∘⟨refl) ⟩∘⟨refl ⟩ 
+            _ ≈⟨ refl⟩∘⟨ MR.pullʳ C (Equiv.sym C1) ⟩ 
+            _ ≈⟨ refl⟩∘⟨ sym-assoc ⟩ 
+            _ ≈⟨ refl⟩∘⟨ assoc ⟩∘⟨refl ⟩ 
+            _ ≈⟨ refl⟩∘⟨ (∘-resp-≈ʳ C7) ⟩∘⟨refl ⟩ 
+            _ ≈⟨ refl⟩∘⟨ MR.elimˡ C C6 ⟩ 
+            _ ≈˘⟨ (refl⟩∘⟨ MR.pushˡ C F.homomorphism) ⟩∘⟨refl ⟩ 
             _ ≈⟨ {! !} ⟩ 
-            _ ≈⟨ {! !} ⟩ 
+            _ ≈⟨ MR.pullʳ C C1' ⟩ 
+            _ ≈⟨ sym-assoc ○ assoc ⟩∘⟨refl ⟩ 
+            _ ≈⟨ sym-assoc ⟩∘⟨refl ⟩ -- C2?
+            _ ≈⟨ ∘-resp-≈ʳ C2 ⟩∘⟨refl ⟩ -- C2?
+            _ ≈⟨ sym-assoc ⟩∘⟨refl ⟩ -- C2?
+            _ ≈⟨ assoc ⟩∘⟨refl ⟩∘⟨refl ⟩ -- C2?
             _ ∎ }
-          -- ((F (ι Y) ∘ F (δ Y) ∘ δ (F Y)) ∘ F (ι (F Y)) ∘ F (F (ι Y)) ∘ δ Y) ∘ F (F f ∘ δ Y ∘ ι Y) ∘ δ X ∘ ι X
+          -- ((F (ι Y) ∘ F (δ Y) ∘ δ (F Y)) ∘ F (ι (F Y)) ∘ F (F (ι Y)) ∘ δ Y) ∘ f ≈ _y_285
           -- ≈
           -- ((F (ι Y) ∘ F (δ Y) ∘ δ (F Y)) ∘ F (ι (F Y)) ∘ F (F f) ∘ δ X) ∘ ι X
         ; iso = λ { X → record 

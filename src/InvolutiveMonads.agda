@@ -127,15 +127,25 @@ _ ≈⟨ F.homomorphism ⟩∘⟨refl ⟩∘⟨refl ⟩∘⟨refl ⟩
           -- ((F (ι Y) ∘ F (δ Y) ∘ δ (F Y)) ∘ F (ι (F Y)) ∘ F (F f) ∘ δ X) ∘ ι X
         ; iso = λ { X → record 
           { isoˡ = begin
-            _ ≈⟨ {! !} ⟩ 
-            _ ≈⟨ {! !} ⟩ 
+            _ ≈⟨ MR.pullʳ C (MR.pullʳ C (assoc ○ Equiv.sym C1)) ⟩ 
+            _ ≈⟨ refl⟩∘⟨ MR.assoc²δγ C ⟩ 
+            _ ≈⟨ refl⟩∘⟨ MR.elimˡ C C6 ⟩
+            _ ≈⟨ sym-assoc ⟩ 
+            _ ≈⟨ MR.assoc²βε C ⟩∘⟨refl ⟩ 
+            _ ≈⟨ MR.elimˡ C (Equiv.sym C3) ⟩ 
             _ ∎
           --((F (ι X) ∘ F (δ X) ∘ δ (F X)) ∘ F (ι (F X)) ∘ F (F (ι X)) ∘ δ X) ∘ ι X 
+          --((F (ι X) ∘ F (δ X) ∘ δ (F X)) ∘ F (ι (F X)) ∘ δ (F X) ∘ ι (F X) ∘ ι X
+          -- (F (ι X) ∘ F (δ X) ∘ δ (F X)) ∘ ι (F X) ∘ ι X ≈ ι X
           --≈ 
           --ι X
           ; isoʳ = begin
-            _ ≈⟨ {! !} ⟩ 
-            _ ≈⟨ {! !} ⟩ 
+            _ ≈⟨ MR.pullʳ C (MR.pullʳ C (assoc ○ Equiv.sym C1)) ⟩ 
+            _ ≈⟨ refl⟩∘⟨ MR.assoc²δγ C ⟩ 
+            _ ≈⟨ refl⟩∘⟨ MR.elimˡ C C6 ⟩
+            _ ≈⟨ sym-assoc ⟩ 
+            _ ≈⟨ MR.assoc²βε C ⟩∘⟨refl ⟩ 
+            _ ≈⟨ MR.elimˡ C (Equiv.sym C3) ⟩ 
             _ ∎ }
           --((F (ι X) ∘ F (δ X) ∘ δ (F X)) ∘ F (ι (F X)) ∘ F (F (ι X)) ∘ δ X) ∘ ι X
           --≈ 

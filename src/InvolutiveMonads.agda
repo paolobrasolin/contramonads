@@ -134,11 +134,6 @@ _ ≈⟨ F.homomorphism ⟩∘⟨refl ⟩∘⟨refl ⟩∘⟨refl ⟩
             _ ≈⟨ MR.assoc²βε C ⟩∘⟨refl ⟩ 
             _ ≈⟨ MR.elimˡ C (Equiv.sym C3) ⟩ 
             _ ∎
-          --((F (ι X) ∘ F (δ X) ∘ δ (F X)) ∘ F (ι (F X)) ∘ F (F (ι X)) ∘ δ X) ∘ ι X 
-          --((F (ι X) ∘ F (δ X) ∘ δ (F X)) ∘ F (ι (F X)) ∘ δ (F X) ∘ ι (F X) ∘ ι X
-          -- (F (ι X) ∘ F (δ X) ∘ δ (F X)) ∘ ι (F X) ∘ ι X ≈ ι X
-          --≈ 
-          --ι X
           ; isoʳ = begin
             _ ≈⟨ MR.pullʳ C (MR.pullʳ C (assoc ○ Equiv.sym C1)) ⟩ 
             _ ≈⟨ refl⟩∘⟨ MR.assoc²δγ C ⟩ 
@@ -147,21 +142,32 @@ _ ≈⟨ F.homomorphism ⟩∘⟨refl ⟩∘⟨refl ⟩∘⟨refl ⟩
             _ ≈⟨ MR.assoc²βε C ⟩∘⟨refl ⟩ 
             _ ≈⟨ MR.elimˡ C (Equiv.sym C3) ⟩ 
             _ ∎ }
-          --((F (ι X) ∘ F (δ X) ∘ δ (F X)) ∘ F (ι (F X)) ∘ F (F (ι X)) ∘ δ X) ∘ ι X
-          --≈ 
-          --ι X
           }
         })
       ; G∘F≈id = niHelper (record 
         { η = ι.α
         ; η⁻¹ = ι.α
         ; commute = λ { f → {! !} }
-          --((F (ι X) ∘ F (δ (F X)) ∘ F (ι (F X)) ∘ F (F (F (F f ∘ δ X ∘ ι X) ∘ δ Y ∘ ι Y)) ∘ δ Y) ∘ ι Y
-          --≈
-          --((F (ι X) ∘ F (δ X) ∘ δ (F X)) ∘ F (ι (F X)) ∘ F (F (ι X)) ∘ δ X) ∘ f
+          -- ((F (ι X) ∘ F (δ (F X)) ∘ F (ι (F X)) ∘ F (F (F (F f ∘ δ X ∘ ι X) ∘ δ Y ∘ ι Y)) ∘ δ Y) ∘ ι Y
+          -- ≈
+          -- ((F (ι X) ∘ F (δ X) ∘ δ (F X)) ∘ F (ι (F X)) ∘ F (F (ι X)) ∘ δ X) ∘ f
         ; iso = λ { X → record 
-          { isoˡ = {! !} 
-          ; isoʳ = {! !} } 
+          { isoˡ = begin
+            _ ≈⟨ MR.pullʳ C (MR.pullʳ C (assoc ○ Equiv.sym C1)) ⟩ 
+            _ ≈⟨ refl⟩∘⟨ MR.assoc²δγ C ⟩ 
+            _ ≈⟨ refl⟩∘⟨ MR.elimˡ C C6 ⟩
+            _ ≈⟨ sym-assoc ⟩ 
+            _ ≈⟨ MR.assoc²βε C ⟩∘⟨refl ⟩ 
+            _ ≈⟨ MR.elimˡ C (Equiv.sym C3) ⟩ 
+            _ ∎
+          ; isoʳ = begin
+            _ ≈⟨ MR.pullʳ C (MR.pullʳ C (assoc ○ Equiv.sym C1)) ⟩ 
+            _ ≈⟨ refl⟩∘⟨ MR.assoc²δγ C ⟩ 
+            _ ≈⟨ refl⟩∘⟨ MR.elimˡ C C6 ⟩
+            _ ≈⟨ sym-assoc ⟩ 
+            _ ≈⟨ MR.assoc²βε C ⟩∘⟨refl ⟩ 
+            _ ≈⟨ MR.elimˡ C (Equiv.sym C3) ⟩ 
+            _ ∎ }
           }
         })
       }
